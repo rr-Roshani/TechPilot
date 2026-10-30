@@ -1,0 +1,30 @@
+{% extends "admin/main.html" %}
+{% block content %}
+<section class="panel">
+    <a class="back-link" href="{% url 'admin_questions' %}">← Back to questions</a>
+    <h2 style="margin-top:18px">{{ question.question_text }}</h2>
+    <p class="secondary">{{ question.get_skill_display }} · {{ question.get_difficulty_display }} · {{ question.get_status_display }} · Correct answer: {{ question.correct_answer }}</p>
+    <div class="panel" style="margin-top:20px;background:#fafaff"><strong>Options</strong><p>A. {{ question.option_a }}</p><p>B. {{ question.option_b }}</p><p>C. {{ question.option_c }}</p><p>D. {{ question.option_d }}</p>{% if question.explanation %}<strong>Explanation</strong><p>{{ question.explanation }}</p>{% endif %}</div>
+    {% if can_review %}
+        <div class="stats" style="margin-top:24px"><div class="stat"><span class="stat-label">Times answered</span><strong class="stat-value">{{ answer_count }}</strong></div><div class="stat"><span class="stat-label">Correct answers</span><strong class="stat-value">{{ correct_count }}</strong></div><div class="stat"><span class="stat-label">Students reached</span><strong class="stat-value">{{ student_count }}</strong></div></div>
+        {% if recent_answers or recent_practice_answers %}<h2 style="margin-top:24px">Recent attempts</h2>{% for answer in recent_answers %}<p>{{ answer.attempt.user.username }} · Assessment · {{ answer.selected_answer }} · {% if answer.is_correct %}Correct{% else %}Review{% endif %}</p>{% endfor %}{% for answer in recent_practice_answers %}<p>{{ answer.user.username }} · Practice · {{ answer.career_goal }} · {{ answer.selected_answer }} · {% if answer.is_correct %}Correct{% else %}Review{% endif %}</p>{% endfor %}{% endif %}
+    {% endif %}
+    {% if can_manage %}
+        <h2 style="margin-top:26px">Edit / publish question</h2>
+        <form class="question-form" method="post">
+            {% csrf_token %}
+            <label class="field-label">Question<textarea name="question_text" required>{{ question.question_text }}</textarea></label>
+            <div class="two-col">{% for option_label,option_value in question_options %}<label class="field-label">Option {{ option_label }}<input name="option_{{ option_label|lower }}" value="{{ option_value }}" required></label>{% endfor %}</div>
+            <div class="two-col">
+                <label class="field-label">Skill<select name="skill">{% for value,label in question_skills %}<option value="{{ value }}" {% if question.skill == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
+                <label class="field-label">Difficulty<select name="difficulty">{% for value,label in question_difficulties %}<option value="{{ value }}" {% if question.difficulty == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
+            </div>
+            <label class="field-label">Correct answer<select name="correct_answer">{% for value in "ABCD" %}<option value="{{ value }}" {% if question.correct_answer == value %}selected{% endif %}>{{ value }}</option>{% endfor %}</select></label>
+            <label class="field-label">Explanation<textarea name="explanation">{{ question.explanation }}</textarea></label>
+            <label class="field-label"><input type="checkbox" name="assessment_enabled" {% if question.assessment_enabled %}checked{% endif %}> Include in future baseline and retest assessments</label>
+            <label class="field-label">Publication status<select name="status">{% for value,label in content_statuses %}<option value="{{ value }}" {% if question.status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
+            <button type="submit">Save question</button>
+        </form>
+    {% endif %}
+</section>
+{% endblock %}

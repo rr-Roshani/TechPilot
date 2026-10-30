@@ -1,0 +1,26 @@
+{% extends "admin/main.html" %}
+{% block content %}
+<header class="topbar"><div><h1>Questions</h1><p class="subtitle">Manage the editable question bank assigned to student assessments.</p></div></header>
+<section class="panel" id="questions"><div class="panel-heading"><div><h2>Editable assessment questions</h2><p>Only these admin-created questions are assigned to students in assessments.</p></div></div>
+<div class="question-list">{% for question in questions %}<a class="question-row" href="{% url 'admin_question_detail' question.id %}"><div><strong>{{ question.question_text|truncatechars:110 }}</strong><span>{{ question.get_skill_display }} · {{ question.get_difficulty_display }} · {{ question.get_status_display }} · {% if question.assessment_enabled %}Assessment and practice{% else %}Practice only{% endif %}{% if question.created_by %} · {{ question.created_by.username }}{% endif %}</span></div><span class="pill">Review / edit</span></a>{% empty %}<div class="empty">No editable questions yet.</div>{% endfor %}</div>
+<hr style="border:0;border-top:1px solid #eee;margin:24px 0">
+<h2>Import questions from CSV</h2>
+<p class="secondary">Upload a CSV with question_text, option_a, option_b, option_c, option_d, correct_answer, skill, difficulty, and optional explanation. Nothing is saved until you confirm the preview.</p>
+{% if csv_error %}<div class="message error">{{ csv_error }}</div>{% endif %}
+<form class="question-form" method="post" enctype="multipart/form-data" style="margin-top:12px">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="preview_csv">
+    <input type="file" name="question_file" accept=".csv,text/csv" required>
+    <button type="submit">Preview CSV</button>
+</form>
+{% if csv_preview %}
+    <div class="panel" style="margin-top:18px;background:#fafaff">
+        <h3>Review {{ csv_preview|length }} question{{ csv_preview|length|pluralize }} before importing</h3>
+        <div class="table-wrap" style="margin-top:10px"><table><thead><tr><th>Question</th><th>Skill</th><th>Difficulty</th><th>Answer</th></tr></thead><tbody>{% for item in csv_preview %}<tr><td>{{ item.question_text }}</td><td>{{ item.skill }}</td><td>{{ item.difficulty }}</td><td>{{ item.correct_answer }}</td></tr>{% endfor %}</tbody></table></div>
+        <form method="post" style="margin-top:14px">{% csrf_token %}<input type="hidden" name="action" value="confirm_csv_import"><button type="submit">Confirm and import</button></form>
+    </div>
+{% endif %}
+<hr style="border:0;border-top:1px solid #eee;margin:24px 0">
+<h2>Add question</h2><p class="secondary">New questions are saved as drafts. Review and publish them from the question detail page.</p><form class="question-form" method="post">{% csrf_token %}<label class="field-label">Question<textarea name="question_text" required></textarea></label><div class="two-col">{% for option in "abcd" %}<label class="field-label">Option {{ option|upper }}<input name="option_{{ option }}" required></label>{% endfor %}</div><div class="two-col"><label class="field-label">Skill<select name="skill" required><option value="">Select skill</option>{% for value,label in question_skills %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select></label><label class="field-label">Difficulty<select name="difficulty" required><option value="">Select difficulty</option>{% for value,label in question_difficulties %}<option value="{{ value }}"> {{ label }}</option>{% endfor %}</select></label></div><label class="field-label">Correct answer<select name="correct_answer" required><option value="">Select answer</option><option>A</option><option>B</option><option>C</option><option>D</option></select></label><label class="field-label">Explanation<textarea name="explanation"></textarea></label><label class="field-label"><input type="checkbox" name="assessment_enabled" checked> Include in future baseline and retest assessments</label><button type="submit">Save question draft</button></form>
+</section>
+{% endblock %}

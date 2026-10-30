@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ page_title }} | TechPilot</title>
+    <style>
+        :root { --ink:#20213a; --muted:#737789; --line:#e8e9f0; --purple:#625bf1; --soft:#f4f3ff; }
+        * { box-sizing:border-box; } body { margin:0; background:#f7f8fc; color:var(--ink); font:14px/1.55 Arial,sans-serif; }
+        a { color:inherit; text-decoration:none; } .layout { display:flex; min-height:100vh; }
+        aside { width:235px; flex:0 0 235px; padding:28px 16px; background:#fff; border-right:1px solid var(--line); }
+        .brand { padding:0 10px 30px; font-size:21px; font-weight:800; color:var(--purple); }
+        .label { margin:0 12px 10px; color:#a0a3ad; font-size:10px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; }
+        .nav { display:flex; gap:11px; align-items:center; padding:12px; margin:4px 0; border-radius:11px; color:#686b76; font-weight:700; }
+        .nav:hover,.nav.active { background:var(--soft); color:var(--purple); }
+        main { width:100%; max-width:1100px; margin:0 auto; padding:42px 38px 70px; }
+        h1,h2,h3 { margin:0; } h1 { font-size:31px; letter-spacing:-.05em; } h2 { font-size:19px; }
+        .subtitle { margin:7px 0 28px; color:var(--muted); } .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+        .card { padding:20px; background:#fff; border:1px solid var(--line); border-radius:16px; box-shadow:0 7px 20px rgba(30,30,60,.04); }
+        .card p { color:var(--muted); line-height:1.6; } .meta { color:var(--purple); font-size:11px; font-weight:800; text-transform:uppercase; }
+        .section { margin-top:24px; } .row { display:flex; justify-content:space-between; gap:16px; padding:15px 0; border-bottom:1px solid #f0f1f4; }
+        .row:last-child { border-bottom:0; } .pill { align-self:flex-start; padding:5px 9px; border-radius:99px; background:var(--soft); color:var(--purple); font-size:11px; font-weight:800; white-space:nowrap; }
+        .button { display:inline-block; margin-top:14px; padding:10px 14px; border-radius:9px; background:var(--purple); color:#fff; font-weight:800; }
+        .empty { color:var(--muted); padding:20px 0; }
+        .filters,.level-tabs { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:18px 0; }
+        select,input,textarea { font:inherit; } select { padding:10px 12px; border:1px solid var(--line); border-radius:9px; background:#fff; color:var(--ink); }
+        .detail-list { margin:10px 0 0; padding-left:20px; color:var(--muted); }
+        .detail-list li { margin:6px 0; } .answer-form { display:grid; gap:9px; margin-top:14px; }
+        .answer-form textarea { width:100%; min-height:110px; padding:11px; border:1px solid var(--line); border-radius:10px; resize:vertical; }
+        .answer-form label { font-weight:700; } .toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+        .guidance { margin:18px 0; padding:16px 18px; background:#f4f3ff; border:1px solid #e4e2ff; border-radius:14px; }
+        .notice { margin:12px 0; padding:12px 14px; border-radius:10px; background:#fff; border:1px solid var(--line); }
+        .day-card { margin:10px 0; } .day-card summary,.project-card summary,.question-card summary { cursor:pointer; font-weight:800; }
+        .project-card,.question-card { margin-bottom:14px; } .checkline { display:flex; align-items:center; gap:8px; margin:10px 0; }
+        @media(max-width:800px){aside{width:70px;flex-basis:70px}.brand{font-size:0}.label,.nav span{display:none}.nav{justify-content:center}.grid{grid-template-columns:1fr 1fr}main{padding:28px 20px}}
+        @media(max-width:560px){.grid{grid-template-columns:1fr}.filters select{width:100%}}
+    
+
+        .layout, main, .card, .grid > *, .row > * { min-width:0; }
+        h1, h2, h3, p, strong, .row { overflow-wrap:anywhere; }
+        .grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+        select, input, textarea, button { max-width:100%; }
+        .answer-form textarea { display:block; }
+        .button { min-height:44px; }
+        @media(max-width:800px) {
+            main { padding:26px 20px calc(36px + env(safe-area-inset-bottom, 0px)); }
+            .grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+        }
+        @media(max-width:560px) {
+            .layout { display:block; }
+            aside { width:100%; min-height:0; padding:12px; border-right:0; border-bottom:1px solid var(--line); }
+            .brand { padding:0 6px 8px; font-size:18px; }
+            .label { display:none; }
+            .nav { display:inline-flex; padding:9px 10px; margin:2px; }
+            .nav span { display:inline; }
+            main { width:100%; padding:22px 14px calc(30px + env(safe-area-inset-bottom, 0px)); }
+            .grid { grid-template-columns:minmax(0,1fr); }
+            .filters { align-items:stretch; }
+            .filters label { flex:0 0 100%; }
+            .filters select { width:100%; min-height:44px; }
+            .row { align-items:flex-start; }
+        }
+        @media(max-width:360px) {
+            main { padding-left:12px; padding-right:12px; }
+            .card { padding:16px; }
+            .pill { white-space:normal; }
+        }
+
+    </style>
+</head>
+<body>
+<div class="layout">
+    <aside>
+        <div class="brand">TechPilot</div>
+        <div class="label">Study spaces</div>
+        <a class="nav {% if active_page == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">⌂ <span>Dashboard</span></a>
+        <a class="nav {% if active_page == 'roadmap' %}active{% endif %}" href="{% url 'roadmap' %}">◈ <span>Roadmap</span></a>
+        <a class="nav {% if active_page == 'practice' %}active{% endif %}" href="{% url 'practice' %}">✓ <span>Practice</span></a>
+        <a class="nav {% if active_page == 'interviews' %}active{% endif %}" href="{% url 'interviews' %}">◎ <span>Interview Prep</span></a>
+        <a class="nav {% if active_page == 'projects' %}active{% endif %}" href="{% url 'projects' %}">▣ <span>Projects</span></a>
+        <a class="nav {% if active_page == 'jobs' %}active{% endif %}" href="{% url 'jobs' %}">▰ <span>Jobs</span></a>
+        <a class="nav {% if active_page == 'progress' %}active{% endif %}" href="{% url 'progress' %}">◔ <span>Progress</span></a>
+    </aside>
+    <main>
+        <h1>{{ page_title }}</h1><p class="subtitle">{{ page_subtitle }}</p>
+        {% if career_goal %}<span class="pill">Saved career: {{ career_goal }}</span>{% endif %}
+        {% for message in messages %}<div class="notice" role="status">{{ message }}</div>{% endfor %}
+        {% if guidance %}
+            <section class="guidance">
+                <strong>Recommended next action</strong>
+                <p>{{ guidance.suggested_action }} Next topic: {{ guidance.recommended_next_topic }}.</p>
+                {% if guidance.recommended_project %}<p>Project to try: <strong>{{ guidance.recommended_project.title }}</strong></p>{% endif %}
+                {% if guidance.recommended_interview %}<p>Interview prompt: {{ guidance.recommended_interview.question }}</p>{% endif %}
+                {% if guidance.missing_skills %}<p>Skills to build: {{ guidance.missing_skills|join:", " }}</p>{% endif %}
+            </section>
+        {% endif %}
+        {% if project_cards %}
+            <section>
+                {% if security_scope_note %}<p class="notice"><strong>Authorized testing only.</strong> {{ security_scope_note }}</p>{% endif %}
+                <div class="toolbar"><strong>{% if difficulty_filter == "All" %}10 projects{% else %}{{ project_cards|length }} projects{% endif %}</strong>
+                    {% for level,count in project_counts.items %}<span class="pill">{{ level }}: {{ count }}</span>{% endfor %}
+                </div>
+                <form method="post" class="filters" action="{% url 'projects' %}">
+                    {% csrf_token %}
+                    <label for="career-filter">Career</label>
+                    <select id="career-filter" name="career" onchange="this.form.submit()">
+                        {% if not career_goal %}<option value="" selected disabled>Choose a career</option>{% endif %}
+                        {% for choice in career_choices %}<option value="{{ choice }}" {% if career_goal == choice %}selected{% endif %}>{{ choice }}</option>{% endfor %}
+                    </select>
+                    <label for="difficulty-filter">Difficulty</label>
+                    <select id="difficulty-filter" name="difficulty" onchange="this.form.submit()">
+                        {% for level_choice in difficulty_choices %}<option value="{{ level_choice }}" {% if difficulty_filter == level_choice %}selected{% endif %}>{{ level_choice }}</option>{% endfor %}
+                    </select>
+                </form>
+                {% if project_cards %}
+                    {% for project in project_cards %}
+                        <details class="card project-card">
+                            <summary><span class="pill">{{ project.level }}</span> {{ project.title }}</summary>
+                            <p>{{ project.description }}</p>
+                            <p><strong>Problem:</strong> {{ project.problem }}</p>
+                            <p><strong>Objective:</strong> {{ project.objective }}</p>
+                            <p><strong>Suggested stack:</strong> {{ project.stack }}</p>
+                            <p><strong>Estimated time:</strong> {{ project.duration }}</p>
+                            <p><strong>Expected output:</strong> {{ project.output }}</p>
+                            <p><strong>Skills learned:</strong> {{ project.skills }}</p>
+                            <strong>Implementation plan</strong>
+                            <ol class="detail-list">{% for step in project.steps %}<li>{{ step }}</li>{% endfor %}</ol>
+                            {% if project.stretch %}<p><strong>Optional stretch goal:</strong> {{ project.stretch }}</p>{% endif %}
+                        </details>
+                    {% endfor %}
+                {% else %}<div class="empty">No projects match that difficulty yet.</div>{% endif %}
+            </section>
+        {% endif %}
+        {% if active_page == 'projects' and not project_cards %}
+            <section class="card section empty">Choose a supported career on your Roadmap to see its ten project briefs.</section>
+        {% endif %}
+        {% if interview_questions %}
+            <div class="level-tabs" aria-label="Interview difficulty">
+                {% for interview_level in interview_levels %}
+                    <a class="button" href="?level={{ interview_level }}" {% if selected_level == interview_level %}aria-current="page"{% endif %}>{{ interview_level }}</a>
+                {% endfor %}
+            </div>
+            <p class="muted">{{ completed_days }}/30 interview practice days completed for {{ career_goal }}.</p>
+            {% for question in interview_questions %}
+                <article class="card question-card">
+                    <span class="meta">{{ question.type }} · {{ question.level }} · {{ question.topic }}</span>
+                    <h2 style="margin-top:8px">{{ question.question }}</h2>
+                    <p><strong>What is being evaluated:</strong> {{ question.evaluation }}</p>
+                    <p><strong>Hint:</strong> {{ question.hint }}</p>
+                    <p><strong>Strong answer points:</strong> {{ question.key_points }}</p>
+                    {% if question.saved and question.saved.answer %}<p class="notice"><strong>Your saved answer:</strong><br>{{ question.saved.answer|linebreaksbr }}</p>{% endif %}
+                    <form method="post" class="answer-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="save_answer">
+                        <input type="hidden" name="question_key" value="{{ question.key }}">
+                        <input type="hidden" name="level" value="{{ selected_level }}">
+                        <label for="answer-{{ forloop.counter }}">Your answer</label>
+                        <textarea id="answer-{{ forloop.counter }}" name="answer" maxlength="10000" required>{{ question.saved.answer|default:"" }}</textarea>
+                        <details><summary>Show/Hide sample answer</summary><p>{{ question.sample_answer }}</p></details>
+                        <label for="rating-{{ forloop.counter }}">Self-rating</label>
+                        <select id="rating-{{ forloop.counter }}" name="self_rating">
+                            <option value="">Choose a rating</option>
+                            {% for rating in "12345" %}<option value="{{ rating }}" {% if question.saved.self_rating|stringformat:"s" == rating %}selected{% endif %}>{{ rating }} / 5</option>{% endfor %}
+                        </select>
+                        <label for="feedback-{{ forloop.counter }}">Reflection / feedback</label>
+                        <textarea id="feedback-{{ forloop.counter }}" name="feedback" maxlength="2000">{{ question.saved.feedback|default:"" }}</textarea>
+                        <button class="button" type="submit">Save Answer</button>
+                    </form>
+                </article>
+            {% endfor %}
+            <section id="day-plan" class="card section">
+                <h2>30-day interview practice plan</h2>
+                <p class="muted">Days 1–10 Beginner · 11–20 Intermediate · 21–30 Advanced. Completion is saved per account and career.</p>
+                {% for day in day_plan %}
+                    <details class="day-card">
+                        <summary>{{ day.title }} · {{ day.level }}{% if day.progress.completed %} ✓{% endif %}</summary>
+                        <p><strong>Technical topic:</strong> {{ day.topic }}</p>
+                        <strong>Technical practice</strong>
+                        <ul class="detail-list">{% for q in day.technical_questions %}<li>{{ q.question }}</li>{% endfor %}</ul>
+                        <p><strong>Behavioural:</strong> {{ day.behavioral_question.question }}</p>
+                        <p><strong>Speaking exercise:</strong> {{ day.speaking_exercise }}</p>
+                        <form method="post" class="checkline">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="complete_day">
+                            <input type="hidden" name="day_number" value="{{ day.number }}">
+                            <input type="hidden" name="level" value="{{ selected_level }}">
+                            <label><input type="checkbox" name="completed" {% if day.progress.completed %}checked{% endif %}> Mark day complete</label>
+                            <button class="button" type="submit">Save Day</button>
+                        </form>
+                    </details>
+                {% endfor %}
+            </section>
+        {% endif %}
+        {% if active_page == 'interviews' and not interview_questions %}
+            <section class="card section empty">Choose a supported career on your Roadmap to begin interview practice.</section>
+        {% endif %}
+        {% if job_roles %}
+            {% if not roles_are_live_listings %}<p class="notice"><strong>Career role suggestions.</strong> These are not verified live vacancies. No current openings, employers, salaries, or application links are represented.</p>{% endif %}
+            <div class="grid">
+                {% for role in job_roles %}
+                    <article class="card">
+                        <span class="meta">{{ role.role_kind }}</span>
+                        <h2 style="margin-top:8px">{{ role.title }}</h2>
+                        <p>{{ role.description }}</p>
+                        <p><strong>Required skills:</strong> {{ role.skills }}</p>
+                        <p><strong>Expected responsibilities:</strong> {{ role.responsibilities }}</p>
+                    </article>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if active_page == 'jobs' and not job_roles %}
+            <section class="card section empty">Choose a supported career on your Roadmap to see relevant role suggestions.</section>
+        {% endif %}
+        {% if resource_cards %}
+            <div class="grid">{% for card in resource_cards %}<article class="card"><span class="meta">{{ card.meta }}</span><h2 style="margin-top:8px">{{ card.title }}</h2><p>{{ card.description }}</p></article>{% endfor %}</div>
+        {% endif %}
+        {% if active_page == 'practice' %}
+            <section class="card section">
+                <h2>My Practice Progress</h2>
+                <div class="grid section">
+                    <div class="notice"><strong>{{ completed_practice_labs }}</strong> completed labs or challenges</div>
+                    <div class="notice"><strong>{{ practice_correct_count }}/{{ practice_attempt_count }}</strong> correct practice answers</div>
+                    <div class="notice"><strong>{{ practice_accuracy }}%</strong> accuracy across saved practice attempts</div>
+                </div>
+            </section>
+            <section class="card section">
+                <h2>Hands-on Skill Labs for {{ career_goal }}</h2>
+                {% for lab in skill_labs %}
+                    <article class="card section">
+                        <span class="meta">{{ lab.get_difficulty_display }} · {{ lab.skill }}</span>
+                        <h3>{{ lab.title }}</h3><p><strong>Learning objective:</strong> {{ lab.description }}</p>
+                        <p><strong>Instructions:</strong> {{ lab.task }}</p>
+                        {% if lab.explanation %}<details><summary>Hint / explanation</summary><p>{{ lab.explanation }}</p></details>{% endif %}
+                        {% if lab.latest_attempt %}<p class="notice">Your saved response: {{ lab.latest_attempt.response }}{% if lab.latest_attempt.completed %} · Completed{% else %} · In progress{% endif %}</p>{% endif %}
+                        <form method="post" class="answer-form">
+                            {% csrf_token %}<input type="hidden" name="action" value="submit_lab"><input type="hidden" name="lab_id" value="{{ lab.id }}">
+                            <label for="lab-response-{{ lab.id }}">Your work / result</label>
+                            <textarea id="lab-response-{{ lab.id }}" name="response" required placeholder="Describe what you tried and the result you got."></textarea>
+                            <label class="checkline"><input type="checkbox" name="completed"> I completed this lab</label>
+                            <button class="button" type="submit">Save lab work</button>
+                        </form>
+                        {% if lab.expected_answer %}<details><summary>Expected result</summary><p>{{ lab.expected_answer }}</p></details>{% endif %}
+                    </article>
+                {% empty %}<div class="empty">No published skill labs for this career yet.</div>{% endfor %}
+            </section>
+            <section class="card section">
+                <h2>Practice Challenges for {{ career_goal }}</h2>
+                {% for lab in practice_challenges %}
+                    <article class="card section"><span class="meta">{{ lab.get_difficulty_display }} · {{ lab.skill }}</span><h3>{{ lab.title }}</h3><p>{{ lab.description }}</p><p>{{ lab.task }}</p>
+                        {% if lab.latest_attempt %}<p class="notice">Saved submission · {% if lab.latest_attempt.completed %}Completed{% else %}In progress{% endif %}</p>{% endif %}
+                        <form method="post" class="answer-form">{% csrf_token %}<input type="hidden" name="action" value="submit_lab"><input type="hidden" name="lab_id" value="{{ lab.id }}"><label for="challenge-response-{{ lab.id }}">Your solution / analysis</label><textarea id="challenge-response-{{ lab.id }}" name="response" required></textarea><label class="checkline"><input type="checkbox" name="completed"> Mark challenge complete</label><button class="button" type="submit">Save challenge</button></form>
+                        {% if lab.explanation %}<details><summary>Hint</summary><p>{{ lab.explanation }}</p></details>{% endif %}{% if lab.expected_answer %}<details><summary>Expected outcome</summary><p>{{ lab.expected_answer }}</p></details>{% endif %}
+                    </article>
+                {% empty %}<div class="empty">No published challenges for this career yet.</div>{% endfor %}
+            </section>
+            <section class="card section">
+                <h2>Concept Question Bank</h2>
+                <form method="get" class="filters">
+                    <label for="practice-skill">Topic</label><select id="practice-skill" name="skill"><option value="">All career topics</option>{% for value,label in practice_skill_choices %}<option value="{{ value }}" {% if question_skill_filter == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select>
+                    <label for="practice-difficulty">Difficulty</label><select id="practice-difficulty" name="difficulty"><option value="">All levels</option>{% for value,label in practice_difficulty_choices %}<option value="{{ value }}" {% if question_difficulty_filter == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select>
+                    <button class="button" type="submit">Filter questions</button>
+                </form>
+                {% for question in practice_questions %}
+                    <article class="card question-card" id="question-{{ question.id }}">
+                        <span class="meta">{{ question.get_skill_display }} · {{ question.get_difficulty_display }}</span><h3>{{ question.question_text }}</h3>
+                        {% if question.latest_practice_attempt %}<p class="notice">Latest answer: {{ question.latest_practice_attempt.selected_answer }} · {% if question.latest_practice_attempt.is_correct %}Correct{% else %}Review this concept and retry below{% endif %}</p>{% endif %}
+                        <form method="post" class="answer-form">{% csrf_token %}<input type="hidden" name="action" value="answer_question"><input type="hidden" name="question_id" value="{{ question.id }}">
+                            {% for value,option in question.get_options %}<label><input type="radio" name="answer" value="{{ value }}" required> {{ value }}. {{ option }}</label>{% endfor %}
+                            <button class="button" type="submit">Check answer</button>
+                        </form>
+                        {% if question.latest_practice_attempt and question.explanation %}<details><summary>Explanation</summary><p>{{ question.explanation }}</p></details>{% endif %}
+                    </article>
+                {% empty %}<div class="empty">No published questions match this career and filter yet. Labs and challenges remain available above.</div>{% endfor %}
+                <a class="button" href="{% url 'roadmap_test' %}">Take a full assessment</a>
+            </section>
+            <section class="card section"><h2>Review incorrect practice answers</h2>{% for answer in wrong_answers %}<div class="row"><strong>{{ answer.question.question_text }}</strong><span class="pill">Retry in Question Bank</span></div>{% empty %}<div class="empty">No incorrect practice answers recorded for this career yet.</div>{% endfor %}</section>
+        {% endif %}
+    </main>
+</div>
+</body>
+</html>

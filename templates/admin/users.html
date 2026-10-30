@@ -1,0 +1,11 @@
+{% extends "admin/main.html" %}
+{% block content %}
+<header class="topbar"><div><h1>Students</h1><p class="subtitle">Registered students and their learning progress.</p></div></header>
+<section class="panel" id="users">
+    <div class="panel-heading"><div><h2>Registered students</h2><p>Click a student to view assessment analytics.</p></div></div>
+    <form class="search" method="get"><input name="q" value="{{ search_query }}" placeholder="Search students by name or email"><button type="submit">Search</button></form>
+    <div class="table-wrap"><table><thead><tr><th>Student</th><th>Onboarding</th><th>Career goal</th><th>Progress</th><th>Latest assessment</th></tr></thead><tbody>
+    {% for row in user_rows %}<tr><td><a class="person" href="{% url 'admin_user_detail' row.user.id %}"><div class="avatar">{{ row.user.first_name|first|default:row.user.username|first|upper }}</div><div><strong>{{ row.user.get_full_name|default:row.user.username }}</strong><span>{{ row.user.email|default:row.user.username }}</span></div></a></td><td>{% if row.profile and row.profile.onboarding_completed %}<span class="pill done">Complete</span>{% else %}<span class="pill pending">Pending</span>{% endif %}</td><td class="secondary">{% if row.profile %}{{ row.profile.career_goal|default:"Not selected" }}{% else %}Not started{% endif %}</td><td>{% if row.progress %}{{ row.progress.career_progress }}%{% else %}—{% endif %}</td><td>{% if row.latest_attempt %}{{ row.latest_attempt.score }}%{% else %}Not attempted{% endif %}</td></tr>{% empty %}<tr><td colspan="5"><div class="empty">No registered students found.</div></td></tr>{% endfor %}
+    </tbody></table></div>
+</section>
+{% endblock %}

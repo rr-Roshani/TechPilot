@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ mission_title }} | TechPilot</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f6fc;color:#20243a;font-family:Arial,sans-serif}
+header{background:white;padding:18px 5%;border-bottom:1px solid #e8eaf2}
+header a{color:#6554f0;text-decoration:none;font-weight:bold}
+main{max-width:1050px;margin:28px auto;padding:0 18px 50px}
+.hero{padding:30px;border-radius:20px;color:white;background:linear-gradient(120deg,#6554f0,#ad68e9)}
+.hero h1{font-size:clamp(25px,4vw,36px);margin:12px 0}
+.meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:20px}
+.panel{background:white;border:1px solid #e6e8f1;border-radius:16px;padding:24px;margin-top:20px}
+h2{margin-top:0}
+.steps li{padding:6px 0}
+.question{padding:18px 0;border-bottom:1px solid #ececf3}
+.option{display:flex;gap:10px;align-items:flex-start;padding:11px 13px;margin-top:8px;border:1px solid #e3e5ef;border-radius:10px;cursor:pointer}
+.option:has(input:checked){border-color:#6554f0;background:#f4f1ff}
+.option input{margin-top:3px;accent-color:#6554f0}
+button,.btn{display:inline-block;border:0;border-radius:10px;background:#6554f0;color:white;padding:13px 19px;font-size:15px;font-weight:bold;cursor:pointer;text-decoration:none}
+button:hover,.btn:hover{background:#5140d5}
+.muted{color:#6c7185;line-height:1.6}
+.notice{padding:14px;border-radius:10px;background:#fff4e5;color:#8a4b00;margin:15px 0}
+.score{font-size:30px;font-weight:800;color:#6554f0}
+.review{padding:14px 0;border-bottom:1px solid #eee}
+.good{color:#13834b}.bad{color:#bd3434}
+@media(max-width:600px){.panel,.hero{padding:20px}.meta{gap:10px}}
+
+
+        main, .hero, .panel, .question, .review { min-width:0; }
+        h1, h2, h3, p, li, strong { overflow-wrap:anywhere; }
+        input, textarea, button, .btn { max-width:100%; }
+        textarea { width:100%; }
+        button, .btn { min-height:44px; }
+        @media(max-width:600px) {
+            header { padding:16px max(16px, env(safe-area-inset-left, 0px)); }
+            main { padding:0 14px calc(32px + env(safe-area-inset-bottom, 0px)); }
+            .panel, .hero { padding:18px; }
+            .option { padding:12px; }
+        }
+        @media(max-width:360px) { main { padding-left:12px; padding-right:12px; } }
+
+    </style>
+</head>
+<body>
+<header>
+  <a href="{% url 'missions' %}">← Back to Daily Missions</a>
+</header>
+
+<main>
+  <section class="hero">
+    <div>DAY {{ day_number }} · {{ mission.category|default:"Technology" }}</div>
+    <h1>{{ mission_title }}</h1>
+    <p>{{ mission.description }}</p>
+    <div class="meta">
+      <span>⏱ {{ mission.duration }} min</span>
+      <span>📶 {{ mission.difficulty }}</span>
+      <span>⭐ {{ mission.xp }} XP</span>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>🎯 Mission Objective</h2>
+    <p>{{ mission.objective }}</p>
+    <h3>Learning Steps</h3>
+    <ol class="steps">
+      {% for step in mission.steps %}
+        <li>{{ step }}</li>
+      {% endfor %}
+    </ol>
+    <h3>🚩 Mini Challenge</h3>
+    <p>{{ mission.challenge }}</p>
+  </section>
+
+  {% if result.error %}
+    <div class="notice">{{ result.error }}</div>
+  {% endif %}
+
+  {% if result.review %}
+    <section class="panel">
+      <h2>🎉 Quiz Result</h2>
+      <p class="score">{{ result.score }}/{{ result.total }}</p>
+      <p>
+        {% if result.score >= 7 %}
+          Great work! You have a strong start on these concepts.
+        {% else %}
+          Mission submitted! Review the explanations to strengthen your basics.
+        {% endif %}
+      </p>
+
+      {% for item in result.review %}
+        <div class="review">
+          <strong>{{ item.number }}. {{ item.question }}</strong>
+          <p class="{% if item.is_correct %}good{% else %}bad{% endif %}">
+            Your answer: {{ item.chosen }}
+          </p>
+          {% if not item.is_correct %}
+            <p class="good">Correct answer: {{ item.correct }}</p>
+          {% endif %}
+          <p class="muted">{{ item.explanation }}</p>
+        </div>
+      {% endfor %}
+
+      <p class="good"><strong>✅ Mission completed and quiz attempt saved.</strong></p>
+      <a class="btn" href="{% url 'missions' %}">Back to Daily Missions</a>
+    </section>
+
+  {% elif completed %}
+    <section class="panel">
+      <h2>✅ Mission Completed</h2>
+      <p>This mission has already been completed.</p>
+      <h3>Recent Quiz Attempts</h3>
+      {% for attempt in latest_attempts %}
+        <p>Score: <strong>{{ attempt.score }}/{{ attempt.total_questions }}</strong>
+        · {{ attempt.completed_at|date:"d M Y, h:i A" }}</p>
+      {% empty %}
+        <p class="muted">No saved quiz attempts found for this mission.</p>
+      {% endfor %}
+      <a class="btn" href="{% url 'missions' %}">Back to Daily Missions</a>
+    </section>
+
+  {% else %}
+    <form method="POST">
+      {% csrf_token %}
+      <section class="panel">
+        <h2>🧠 Mission Quiz</h2>
+        <p class="muted">Answer all 10 questions. Choose one option for each question.</p>
+
+        {% for q in questions %}
+          <div class="question">
+            <h3>{{ forloop.counter }}. {{ q.text }}</h3>
+            {% for option in q.options %}
+              <label class="option">
+                <input type="radio" name="{{ q.id }}" value="{{ option.value }}" required>
+                <span>{{ option.text }}</span>
+              </label>
+            {% endfor %}
+          </div>
+        {% endfor %}
+
+        <button type="submit">Submit Quiz &amp; Complete Mission</button>
+      </section>
+    </form>
+  {% endif %}
+</main>
+</body>
+</html>

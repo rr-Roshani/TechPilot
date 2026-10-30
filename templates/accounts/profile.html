@@ -1,0 +1,1017 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>My Profile | TechPilot</title>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/style.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+>
+
+</head>
+
+<body>
+
+<!-- =========================================================
+     SIDEBAR
+     ========================================================= -->
+
+<aside class="sidebar">
+
+
+<div class="sidebar-logo">
+
+    <div class="logo-mark">
+        T
+    </div>
+
+    <div>
+        <h2>TechPilot</h2>
+        <span>Career Workspace</span>
+    </div>
+
+</div>
+
+
+<nav class="sidebar-nav">
+
+    <!-- Dashboard -->
+
+    <a
+        href="{% url 'dashboard' %}"
+        class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"
+    >
+        <span class="nav-icon">
+            <i class="fa-solid fa-house"></i>
+        </span>
+
+        <span>Dashboard</span>
+    </a>
+
+
+    <!-- Roadmap -->
+
+    <a
+        href="{% url 'roadmap' %}"
+        class="nav-item {% if request.resolver_match.url_name == 'roadmap' %}active{% endif %}"
+    >
+        <span class="nav-icon">
+            <i class="fa-solid fa-route"></i>
+        </span>
+
+        <span>My Roadmap</span>
+    </a>
+
+
+    <!-- Daily Missions -->
+
+    <a
+        href="{% url 'missions' %}"
+        class="nav-item {% if request.resolver_match.url_name == 'missions' %}active{% endif %}"
+    >
+        <span class="nav-icon">
+            <i class="fa-solid fa-circle-check"></i>
+        </span>
+
+        <span>Daily Missions</span>
+    </a>
+
+
+    <!-- Assessment -->
+
+    <a
+        href="{% url 'assessment' %}"
+        class="nav-item {% if request.resolver_match.url_name == 'assessment' or request.resolver_match.url_name == 'assessment_result' %}active{% endif %}"
+    >
+        <span class="nav-icon">
+            <i class="fa-solid fa-bullseye"></i>
+        </span>
+
+        <span>Assessment</span>
+    </a>
+
+
+    <!-- =================================================
+         PRACTICE — COMING SOON
+         ================================================= -->
+
+    <!--
+
+    <a
+        href="{% url 'practice' %}"
+        class="nav-item {% if request.resolver_match.url_name == 'practice' %}active{% endif %}"
+    >
+        <span class="nav-icon">
+            <i class="fa-solid fa-code"></i>
+        </span>
+
+        <span>Practice</span>
+    </a>
+
+    -->
+
+
+    <!-- =================================================
+         PROJECTS — COMING SOON
+         ================================================= -->
+
+    <!--
+
+    <a
+        href="{% url 'projects' %}"
+        class="nav-item {% if request.resolver_match.url_name == 'projects' %}active{% endif %}"
+    >
+        <span class="nav-icon">
+            <i class="fa-solid fa-folder-open"></i>
+        </span>
+
+        <span>Projects</span>
+    </a>
+
+    -->
+
+
+    <!-- =================================================
+         JOBS — COMING SOON
+         ================================================= -->
+
+    <!--
+
+    <a
+        href="{% url 'jobs' %}"
+        class="nav-item {% if request.resolver_match.url_name == 'jobs' %}active{% endif %}"
+    >
+        <span class="nav-icon">
+            <i class="fa-solid fa-briefcase"></i>
+        </span>
+
+        <span>Jobs</span>
+    </a>
+
+    -->
+
+
+    <!-- =================================================
+         INTERVIEW — COMING SOON
+         ================================================= -->
+
+    <!--
+
+    <a
+        href="{% url 'interviews' %}"
+        class="nav-item {% if request.resolver_match.url_name == 'interviews' %}active{% endif %}"
+    >
+        <span class="nav-icon">
+            <i class="fa-solid fa-comments"></i>
+        </span>
+
+        <span>Interview</span>
+    </a>
+
+    -->
+
+</nav>
+
+
+<!-- SIDEBAR BOTTOM -->
+
+<div class="sidebar-bottom">
+
+    <!-- My Profile -->
+
+    <a
+        href="{% url 'profile' %}"
+        class="nav-item {% if request.resolver_match.url_name == 'profile' %}active{% endif %}"
+    >
+        <span class="nav-icon">
+            <i class="fa-solid fa-user"></i>
+        </span>
+
+        <span>My Profile</span>
+    </a>
+
+
+    <!-- Logout -->
+
+    <a
+        href="{% url 'logout' %}"
+        class="nav-item"
+    >
+        <span class="nav-icon">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </span>
+
+        <span>Logout</span>
+    </a>
+
+</div>
+
+
+</aside>
+
+<!-- =========================================================
+     MOBILE HEADER
+     ========================================================= -->
+
+<header class="mobile-header">
+
+
+<div class="mobile-brand">
+
+    <div class="logo-mark">
+        T
+    </div>
+
+    <strong>
+        TechPilot
+    </strong>
+
+</div>
+</header>
+
+<!-- =========================================================
+     MAIN CONTENT
+     ========================================================= -->
+
+<main class="page-content">
+
+<div class="profile-page">
+
+
+    <!-- =================================================
+         HEADER
+         ================================================= -->
+
+    <section class="profile-header">
+
+        <div>
+
+            <span class="profile-eyebrow">
+                MY PROFILE
+            </span>
+
+            <h1>
+                Your TechPilot Profile
+            </h1>
+
+            <p>
+                Keep your career information and learning
+                journey up to date.
+            </p>
+
+        </div>
+
+
+        <a
+            href="{% url 'edit_profile' %}"
+            class="profile-edit-btn"
+        >
+            <i class="fa-solid fa-pen"></i>
+
+            Edit Profile
+        </a>
+
+    </section>
+
+
+    <!-- =================================================
+         PROFILE HERO
+         ================================================= -->
+
+    <section class="profile-hero-card">
+
+
+        <div class="profile-avatar">
+
+            {{ student_name|first|upper }}
+
+        </div>
+
+
+        <div class="profile-main-info">
+
+            <h2>
+                {{ student_name }}
+            </h2>
+
+            <p>
+                {{ profile.career_goal|default:"Career goal not added" }}
+            </p>
+
+
+            <div class="profile-tags">
+
+                <span>
+                    {{ profile.education|default:"Education not added" }}
+                </span>
+
+                <span>
+                    {{ profile.year|default:"Year not added" }}
+                </span>
+
+                <span>
+                    {{ profile.specialization|default:"Specialization not added" }}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="profile-readiness">
+
+            <span>
+                Career Progress
+            </span>
+
+            <strong>
+                {{ progress }}%
+            </strong>
+
+            <div class="profile-progress">
+
+                <div
+                    class="profile-progress-fill"
+                    style="width: {{ progress }}%;"
+                ></div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         STATS
+         ================================================= -->
+
+    <section class="profile-stats">
+
+
+        <div class="profile-stat-card">
+
+            <div class="stat-icon">
+                <i class="fa-solid fa-star"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    Total XP
+                </span>
+
+                <strong>
+                    {{ total_xp }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="profile-stat-card">
+
+            <div class="stat-icon">
+                <i class="fa-solid fa-fire"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    Current Streak
+                </span>
+
+                <strong>
+                    {{ streak }} days
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="profile-stat-card">
+
+            <div class="stat-icon">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    Missions Completed
+                </span>
+
+                <strong>
+                    {{ missions_completed }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="profile-stat-card">
+
+            <div class="stat-icon">
+                <i class="fa-solid fa-bullseye"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    Assessment Score
+                </span>
+
+                <strong>
+
+                    {% if has_assessment %}
+                        {{ assessment_score }}%
+                    {% else %}
+                        —
+                    {% endif %}
+
+                </strong>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =================================================
+         INFORMATION GRID
+         ================================================= -->
+
+    <section class="profile-grid">
+
+
+        <!-- PERSONAL INFORMATION -->
+
+        <div class="profile-card">
+
+            <div class="card-heading">
+
+                <div>
+
+                    <span>
+                        PROFILE
+                    </span>
+
+                    <h3>
+                        Personal Information
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="info-list">
+
+
+                <div class="info-row">
+
+                    <span>
+                        Full Name
+                    </span>
+
+                    <strong>
+                        {{ student_name }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span>
+                        Email
+                    </span>
+
+                    <strong class="email-value">
+                        {{ request.user.email }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span>
+                        Education
+                    </span>
+
+                    <strong>
+                        {{ profile.education|default:"Not added" }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span>
+                        Current Year
+                    </span>
+
+                    <strong>
+                        {{ profile.year|default:"Not added" }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span>
+                        Specialization
+                    </span>
+
+                    <strong>
+                        {{ profile.specialization|default:"Not added" }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span>
+                        Preparation
+                    </span>
+
+                    <strong>
+                        {{ profile.preparation|default:"Skill Building"|title }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span>
+                        Daily Study Time
+                    </span>
+
+                    <strong>
+                        {{ profile.study_time }} minutes
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- CAREER INFORMATION -->
+
+        <div class="profile-card">
+
+            <div class="card-heading">
+
+                <div>
+
+                    <span>
+                        CAREER
+                    </span>
+
+                    <h3>
+                        Career Direction
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="career-box">
+
+                <div class="career-icon">
+                    <i class="fa-solid fa-compass"></i>
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Current Goal
+                    </span>
+
+                    <h4>
+                        {{ profile.career_goal|default:"Not selected" }}
+                    </h4>
+
+                </div>
+
+            </div>
+
+
+            <div class="career-details">
+
+
+                <div>
+
+                    <span>
+                        Skill Level
+                    </span>
+
+                    <strong>
+                        {{ profile.skill_level|default:"Not assessed"|title }}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Learning Time
+                    </span>
+
+                    <strong>
+                        {{ profile.study_time }} min/day
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =================================================
+         SKILLS
+         ================================================= -->
+
+    <section class="profile-card skills-card">
+
+
+        <div class="card-heading">
+
+            <div>
+
+                <span>
+                    SKILL STACK
+                </span>
+
+                <h3>
+                    Your Skills
+                </h3>
+
+            </div>
+
+
+            <span class="skill-count">
+
+                {{ profile.skills|length }}
+                skills
+
+            </span>
+
+        </div>
+
+
+        {% if profile.skills %}
+
+            <div class="skills-container">
+
+                {% for skill in profile.skills %}
+
+                    <span class="skill-chip">
+
+                        {{ skill }}
+
+                    </span>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="empty-state">
+
+                <div>
+                    +
+                </div>
+
+                <p>
+                    No skills added yet.
+                </p>
+
+                <a href="{% url 'edit_profile' %}">
+                    Add Skills
+                </a>
+
+            </div>
+
+        {% endif %}
+
+
+    </section>
+
+
+    <!-- =================================================
+         LEARNING PROGRESS
+         ================================================= -->
+
+    <section class="profile-card progress-card">
+
+
+        <div class="card-heading">
+
+            <div>
+
+                <span>
+                    LEARNING JOURNEY
+                </span>
+
+                <h3>
+                    Your Progress
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <div class="progress-grid">
+
+
+            <!-- Career Progress -->
+
+            <div class="progress-item">
+
+                <div class="progress-label">
+
+                    <span>
+                        Career Progress
+                    </span>
+
+                    <strong>
+                        {{ progress }}%
+                    </strong>
+
+                </div>
+
+                <div class="progress-track">
+
+                    <div
+                        class="progress-fill"
+                        style="width: {{ progress }}%;"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Assessment -->
+
+            <div class="progress-item">
+
+                <div class="progress-label">
+
+                    <span>
+                        Assessment
+                    </span>
+
+                    <strong>
+
+                        {{ assessment_score }}%
+
+                    </strong>
+
+                </div>
+
+
+                <div class="progress-track">
+
+                    <div
+                        class="progress-fill"
+                        style="width: {{ assessment_score }}%;"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Missions -->
+
+            <div class="progress-item">
+
+                <div class="progress-label">
+
+                    <span>
+                        Missions
+                    </span>
+
+                    <strong>
+                        {{ mission_progress }}%
+                    </strong>
+
+                </div>
+
+
+                <div class="progress-track">
+
+                    <div
+                        class="progress-fill"
+                        style="width: {{ mission_progress }}%;"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Attendance -->
+
+            <div class="progress-item">
+
+                <div class="progress-label">
+
+                    <span>
+                        Learning Attendance
+                    </span>
+
+                    <strong>
+                        {{ attendance }}%
+                    </strong>
+
+                </div>
+
+
+                <div class="progress-track">
+
+                    <div
+                        class="progress-fill"
+                        style="width: {{ attendance }}%;"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         ACTIVITY SUMMARY
+         ================================================= -->
+
+    <section class="profile-card activity-card">
+
+
+        <div class="card-heading">
+
+            <div>
+
+                <span>
+                    ACTIVITY
+                </span>
+
+                <h3>
+                    Learning Summary
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <div class="activity-grid">
+
+
+            <div class="activity-item">
+
+                <span>
+                    Practice Completed
+                </span>
+
+                <strong>
+                    {{ practice_completed }}
+                </strong>
+
+            </div>
+
+
+            <div class="activity-item">
+
+                <span>
+                    Projects Completed
+                </span>
+
+                <strong>
+                    {{ projects_completed }}
+                </strong>
+
+            </div>
+
+
+            <div class="activity-item">
+
+                <span>
+                    Interviews Completed
+                </span>
+
+                <strong>
+                    {{ interviews_completed }}
+                </strong>
+
+            </div>
+
+
+            <div class="activity-item">
+
+                <span>
+                    Longest Streak
+                </span>
+
+                <strong>
+                    {{ learning_progress.longest_streak|default:"0" }}
+                    days
+                </strong>
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =================================================
+         CTA
+         ================================================= -->
+
+    <section class="profile-cta">
+
+
+        <div>
+
+            <span>
+                KEEP MOVING FORWARD
+            </span>
+
+            <h3>
+                Ready for your next step?
+            </h3>
+
+            <p>
+                Continue your personalized TechPilot journey
+                and keep building career-ready skills.
+            </p>
+
+        </div>
+
+
+        <a
+            href="{% url 'roadmap' %}"
+            class="cta-button"
+        >
+            View My Roadmap
+            <i class="fa-solid fa-arrow-right"></i>
+        </a>
+
+
+    </section>
+
+
+</div>
+</main>
+
+</body>
+
+</html>

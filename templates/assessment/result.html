@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Assessment Result | TechPilot</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            background: #f5f6fa;
+
+            color: #171827;
+
+            min-height: 100vh;
+
+            overflow-x: hidden;
+        }
+
+
+        /* =================================
+           NAVBAR
+        ================================= */
+
+        .topbar {
+
+            width: 100%;
+
+            min-height: 70px;
+
+            background: #ffffff;
+
+            border-bottom: 1px solid #e8e8ef;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding:
+                0
+                clamp(16px, 5vw, 80px);
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 100;
+        }
+
+
+        .logo {
+
+            font-size:
+                clamp(20px, 3vw, 24px);
+
+            font-weight: 850;
+
+            letter-spacing: -0.6px;
+        }
+
+
+        .logo span {
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #6c5ce7,
+                    #9b59ff
+                );
+
+            -webkit-background-clip: text;
+
+            background-clip: text;
+
+            color: transparent;
+        }
+
+
+        .back-link {
+
+            text-decoration: none;
+
+            color: #656677;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            padding: 9px 12px;
+
+            border-radius: 9px;
+
+            transition: 0.2s;
+        }
+
+
+        .back-link:hover {
+
+            background: #f1efff;
+
+            color: #6554d8;
+        }
+
+
+        /* =================================
+           MAIN
+        ================================= */
+
+        .page {
+
+            width: 100%;
+
+            max-width: 1120px;
+
+            margin: auto;
+
+            padding:
+                clamp(28px, 5vw, 60px)
+                clamp(14px, 4vw, 28px)
+                70px;
+        }
+
+
+        /* =================================
+           HEADER
+        ================================= */
+
+        .result-header {
+
+            text-align: center;
+
+            margin-bottom:
+                clamp(22px, 4vw, 35px);
+        }
+
+
+        .badge {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            padding: 7px 13px;
+
+            border-radius: 50px;
+
+            background: #eeeafd;
+
+            color: #6554d8;
+
+            font-size: 11px;
+
+            font-weight: 850;
+
+            letter-spacing: 0.5px;
+
+            margin-bottom: 13px;
+        }
+
+
+        .result-header h1 {
+
+            font-size:
+                clamp(27px, 5vw, 43px);
+
+            line-height: 1.15;
+
+            letter-spacing: -1.2px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .result-header p {
+
+            color: #727384;
+
+            font-size:
+                clamp(13px, 2vw, 16px);
+
+            line-height: 1.6;
+
+            max-width: 650px;
+
+            margin: auto;
+        }
+
+
+        /* =================================
+           SCORE CARD
+        ================================= */
+
+        .score-card {
+
+            background: #ffffff;
+
+            border: 1px solid #e7e7ee;
+
+            border-radius:
+                clamp(18px, 3vw, 25px);
+
+            padding:
+                clamp(22px, 5vw, 45px);
+
+            display: grid;
+
+            grid-template-columns:
+                minmax(190px, 260px)
+                1fr;
+
+            gap:
+                clamp(25px, 6vw, 65px);
+
+            align-items: center;
+
+            box-shadow:
+                0 18px 45px
+                rgba(30, 30, 60, 0.06);
+
+            margin-bottom: 24px;
+        }
+
+
+        /* =================================
+           SCORE CIRCLE
+        ================================= */
+
+        .score-area {
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+        }
+
+
+        .score-circle {
+
+            width:
+                clamp(155px, 24vw, 205px);
+
+            height:
+                clamp(155px, 24vw, 205px);
+
+            border-radius: 50%;
+
+            background:
+                conic-gradient(
+                    #6c5ce7
+                    calc(var(--score) * 1%),
+                    #e9e9f1 0
+                );
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            position: relative;
+        }
+
+
+        .score-circle::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 77%;
+
+            height: 77%;
+
+            background: #ffffff;
+
+            border-radius: 50%;
+        }
+
+
+        .score-content {
+
+            position: relative;
+
+            text-align: center;
+
+            z-index: 2;
+        }
+
+
+        .score-number {
+
+            font-size:
+                clamp(38px, 6vw, 55px);
+
+            line-height: 1;
+
+            font-weight: 900;
+        }
+
+
+        .score-label {
+
+            margin-top: 7px;
+
+            color: #858695;
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+
+        /* =================================
+           SCORE MESSAGE
+        ================================= */
+
+        .score-message h2 {
+
+            font-size:
+                clamp(22px, 3vw, 30px);
+
+            margin-bottom: 10px;
+
+            letter-spacing: -0.5px;
+        }
+
+
+        .score-message p {
+
+            color: #707181;
+
+            font-size: 15px;
+
+            line-height: 1.7;
+
+            max-width: 600px;
+        }
+
+
+        /* =================================
+           META
+        ================================= */
+
+        .score-meta {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+
+            gap: 10px;
+
+            margin-top: 20px;
+        }
+
+
+        .meta-item {
+
+            background: #f7f7fa;
+
+            border: 1px solid #e9e9ef;
+
+            border-radius: 11px;
+
+            padding: 11px 10px;
+
+            text-align: center;
+
+            color: #777887;
+
+            font-size: 12px;
+        }
+
+
+        .meta-item strong {
+
+            display: block;
+
+            margin-top: 3px;
+
+            color: #171827;
+
+            font-size: 16px;
+        }
+
+
+        /* =================================
+           SECTION
+        ================================= */
+
+        .section {
+
+            background: #ffffff;
+
+            border: 1px solid #e7e7ee;
+
+            border-radius:
+                clamp(17px, 3vw, 23px);
+
+            padding:
+                clamp(18px, 4vw, 30px);
+
+            margin-bottom: 24px;
+
+            box-shadow:
+                0 10px 30px
+                rgba(30, 30, 60, 0.035);
+        }
+
+
+        .section-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            margin-bottom: 22px;
+        }
+
+
+        .section-header h2 {
+
+            font-size:
+                clamp(19px, 3vw, 24px);
+        }
+
+
+        .section-header span {
+
+            color: #888999;
+
+            font-size: 12px;
+        }
+
+
+        /* =================================
+           PERFORMANCE
+        ================================= */
+
+        .performance-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(210px, 1fr)
+                );
+
+            gap: 13px;
+        }
+
+
+        .performance-card {
+
+            background: #fafafd;
+
+            border: 1px solid #e8e8ef;
+
+            border-radius: 14px;
+
+            padding: 17px;
+        }
+
+
+        .performance-top {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .skill-name {
+
+            font-size: 14px;
+
+            font-weight: 800;
+        }
+
+
+        .skill-score {
+
+            font-size: 14px;
+
+            font-weight: 900;
+
+            color: #6554d8;
+        }
+
+
+        .bar {
+
+            width: 100%;
+
+            height: 8px;
+
+            background: #e8e8ef;
+
+            border-radius: 30px;
+
+            overflow: hidden;
+
+            margin-bottom: 9px;
+        }
+
+
+        .bar-fill {
+
+            height: 100%;
+
+            border-radius: 30px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #6c5ce7,
+                    #9b59ff
+                );
+
+            transition:
+                width 0.8s ease;
+        }
+
+
+        .skill-status {
+
+            font-size: 11px;
+
+            color: #777887;
+
+            font-weight: 700;
+        }
+
+
+        /* =================================
+           FOCUS
+        ================================= */
+
+        .focus-box {
+
+            margin-top: 20px;
+
+            padding: 18px;
+
+            border-radius: 14px;
+
+            background: #fff9ed;
+
+            border: 1px solid #f2dfbd;
+        }
+
+
+        .focus-box h3 {
+
+            font-size: 15px;
+
+            margin-bottom: 7px;
+        }
+
+
+        .focus-box p {
+
+            color: #766f61;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+        }
+
+
+        .focus-list {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 8px;
+
+            margin-top: 12px;
+        }
+
+
+        .focus-tag {
+
+            padding: 7px 10px;
+
+            background: #ffffff;
+
+            border: 1px solid #ead8b6;
+
+            border-radius: 8px;
+
+            color: #755c2d;
+
+            font-size: 12px;
+
+            font-weight: 750;
+        }
+
+
+        /* =================================
+           ANSWER REVIEW
+        ================================= */
+
+        .answer-list {
+
+            display: grid;
+
+            gap: 11px;
+        }
+
+
+        .answer-item {
+
+            border: 1px solid #e8e8ef;
+
+            border-radius: 13px;
+
+            padding: 15px;
+
+            background: #ffffff;
+        }
+
+
+        .answer-item.correct {
+
+            border-left:
+                4px solid #27ae60;
+        }
+
+
+        .answer-item.wrong {
+
+            border-left:
+                4px solid #e74c3c;
+        }
+
+
+        .answer-top {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-start;
+
+            gap: 15px;
+
+            margin-bottom: 9px;
+        }
+
+
+        .answer-question {
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            line-height: 1.5;
+        }
+
+
+        .status {
+
+            flex-shrink: 0;
+
+            padding: 5px 9px;
+
+            border-radius: 7px;
+
+            font-size: 10px;
+
+            font-weight: 850;
+        }
+
+
+        .status.correct {
+
+            color: #21884d;
+
+            background: #eaf8f0;
+        }
+
+
+        .status.wrong {
+
+            color: #d64435;
+
+            background: #fff0ee;
+        }
+
+
+        .answer-details {
+
+            display: grid;
+
+            gap: 5px;
+
+            color: #777887;
+
+            font-size: 12px;
+
+            line-height: 1.5;
+        }
+
+
+        .answer-details strong {
+
+            color: #4e4f5e;
+        }
+
+
+        /* =================================
+           CTA
+        ================================= */
+
+        .cta {
+
+            text-align: center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f0eeff,
+                    #fbf6ff
+                );
+
+            border:
+                1px solid #e2ddff;
+
+            border-radius:
+                clamp(17px, 3vw, 23px);
+
+            padding:
+                clamp(23px, 5vw, 38px);
+        }
+
+
+        .cta h2 {
+
+            font-size:
+                clamp(21px, 4vw, 28px);
+
+            margin-bottom: 9px;
+        }
+
+
+        .cta p {
+
+            color: #707181;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+
+            max-width: 650px;
+
+            margin:
+                0 auto 20px;
+        }
+
+
+        .cta-buttons {
+
+            display: flex;
+
+            justify-content: center;
+
+            flex-wrap: wrap;
+
+            gap: 10px;
+        }
+
+
+        .btn {
+
+            min-height: 45px;
+
+            padding:
+                0 20px;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 11px;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            font-weight: 800;
+
+            transition: 0.2s;
+        }
+
+
+        .btn-primary {
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #6c5ce7,
+                    #9b59ff
+                );
+        }
+
+
+        .btn-secondary {
+
+            color: #555666;
+
+            background: #ffffff;
+
+            border: 1px solid #dddce7;
+        }
+
+
+        .btn:hover {
+
+            transform:
+                translateY(-2px);
+        }
+
+
+        /* =================================
+           TABLET
+        ================================= */
+
+        @media (max-width: 800px) {
+
+            .score-card {
+
+                grid-template-columns: 1fr;
+
+                text-align: center;
+            }
+
+
+            .score-message p {
+
+                margin-left: auto;
+
+                margin-right: auto;
+            }
+
+
+            .score-meta {
+
+                max-width: 500px;
+
+                margin-left: auto;
+
+                margin-right: auto;
+            }
+
+
+            .section-header {
+
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+        }
+
+
+        /* =================================
+           MOBILE
+        ================================= */
+
+        @media (max-width: 600px) {
+
+            .topbar {
+
+                min-height: 62px;
+
+                padding:
+                    0 14px;
+            }
+
+
+            .logo {
+
+                font-size: 20px;
+            }
+
+
+            .back-link {
+
+                font-size: 12px;
+
+                padding:
+                    7px 8px;
+            }
+
+
+            .page {
+
+                padding:
+                    23px 12px 45px;
+            }
+
+
+            .result-header h1 {
+
+                font-size: 28px;
+            }
+
+
+            .score-card {
+
+                padding:
+                    23px 16px;
+
+                gap: 24px;
+            }
+
+
+            .score-meta {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .performance-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .section {
+
+                padding:
+                    17px 14px;
+            }
+
+
+            .answer-top {
+
+                flex-direction: column;
+
+                gap: 9px;
+            }
+
+
+            .status {
+
+                align-self: flex-start;
+            }
+
+
+            .cta-buttons {
+
+                flex-direction: column;
+
+                width: 100%;
+            }
+
+
+            .btn {
+
+                width: 100%;
+            }
+        }
+
+
+        /* =================================
+           VERY SMALL PHONE
+        ================================= */
+
+        @media (max-width: 380px) {
+
+            .result-header h1 {
+
+                font-size: 25px;
+            }
+
+
+            .score-circle {
+
+                width: 145px;
+
+                height: 145px;
+            }
+
+
+            .score-number {
+
+                font-size: 38px;
+            }
+
+
+            .answer-question {
+
+                font-size: 13px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================
+     NAVBAR
+===================================== -->
+
+<header class="topbar">
+
+    <div class="logo">
+        Tech<span>Pilot</span>
+    </div>
+
+
+    <a
+        href="/dashboard/"
+        class="back-link"
+    >
+        ← Dashboard
+    </a>
+
+</header>
+
+
+
+<!-- =====================================
+     MAIN
+===================================== -->
+
+<main class="page">
+
+
+    <!-- HEADER -->
+
+    <section class="result-header">
+
+        <div class="badge">
+            ASSESSMENT COMPLETE
+        </div>
+
+
+        <h1>
+            Here's where you stand. 🎯
+        </h1>
+
+
+        <p>
+            TechPilot analyzed your answers and identified
+            your current strengths and areas that need more practice.
+        </p>
+
+    </section>
+
+
+
+    <!-- SCORE CARD -->
+
+    <section class="score-card">
+
+
+        <div class="score-area">
+
+            <div
+                class="score-circle"
+                style="--score: {{ assessment_score }};"
+            >
+
+                <div class="score-content">
+
+                    <div class="score-number">
+                        {{ assessment_score }}%
+                    </div>
+
+                    <div class="score-label">
+                        Overall Score
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="score-message">
+
+            {% if attempt.score >= 80 %}
+
+                <h2>
+                    Excellent work! 🚀
+                </h2>
+
+                <p>
+                    You have a strong foundation. TechPilot can
+                    focus your journey on advanced skills,
+                    projects and interview preparation.
+                </p>
+
+            {% elif attempt.score >= 60 %}
+
+                <h2>
+                    Good start! 💪
+                </h2>
+
+                <p>
+                    You already have a useful foundation.
+                    Your personalized plan can now focus on
+                    strengthening your weaker areas.
+                </p>
+
+            {% elif attempt.score >= 40 %}
+
+                <h2>
+                    You're on your way! 🌱
+                </h2>
+
+                <p>
+                    You have some fundamentals in place.
+                    Focused practice will help you build a stronger
+                    technical foundation.
+                </p>
+
+            {% else %}
+
+                <h2>
+                    Every journey starts somewhere. ✨
+                </h2>
+
+                <p>
+                    This score is simply your starting point.
+                    TechPilot will use it to identify what you
+                    should learn next.
+                </p>
+
+            {% endif %}
+
+
+            <div class="score-meta">
+
+
+                <div class="meta-item">
+
+                    Questions
+
+                    <strong>
+                        {{ attempt.total_questions }}
+                    </strong>
+
+                </div>
+
+
+                <div class="meta-item">
+
+                    Correct
+
+                    <strong>
+                        {{ attempt.correct_answers }}
+                    </strong>
+
+                </div>
+
+
+                <div class="meta-item">
+
+                    Incorrect
+
+                    <strong>
+                        {{ incorrect_answers }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- SKILL PERFORMANCE -->
+
+    <section class="section">
+
+
+        <div class="section-header">
+
+            <h2>
+                Your Skill Performance
+            </h2>
+
+            <span>
+                Based on your answers
+            </span>
+
+        </div>
+
+
+        <div class="performance-grid">
+
+
+            {% for item in performance %}
+
+                <div class="performance-card">
+
+
+                    <div class="performance-top">
+
+                        <span class="skill-name">
+                            {{ item.skill_name }}
+                        </span>
+
+
+                        <span class="skill-score">
+                            {{ item.percentage }}%
+                        </span>
+
+                    </div>
+
+
+                    <div class="bar">
+
+                        <div
+                            class="bar-fill"
+                            style="width: {{ item.percentage }}%;"
+                        ></div>
+
+                    </div>
+
+
+                    <div class="skill-status">
+
+                        {{ item.status }}
+
+                        ·
+
+                        {{ item.correct }}/{{ item.total }}
+                        correct
+
+                    </div>
+
+                </div>
+
+            {% empty %}
+
+                <p>
+                    No skill data available.
+                </p>
+
+            {% endfor %}
+
+        </div>
+
+
+
+        <!-- FOCUS AREAS -->
+
+        {% if focus_areas %}
+
+            <div class="focus-box">
+
+                <h3>
+                    🎯 Your focus areas
+                </h3>
+
+
+                <p>
+                    These skills need more practice.
+                    TechPilot can prioritize them in your
+                    personalized learning plan.
+                </p>
+
+
+                <div class="focus-list">
+
+                    {% for item in focus_areas %}
+
+                        <span class="focus-tag">
+
+                            {{ item.skill_name }}
+
+                            ·
+
+                            {{ item.percentage }}%
+
+                        </span>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+
+
+    <!-- ANSWER REVIEW -->
+
+    <section class="section">
+
+
+        <div class="section-header">
+
+            <h2>
+                Answer Review
+            </h2>
+
+            <span>
+                {{ attempt.total_questions }} questions
+            </span>
+
+        </div>
+
+
+        <div class="answer-list">
+
+
+            {% for answer in answers %}
+
+                <div
+                    class="
+                        answer-item
+                        {% if answer.is_correct %}
+                            correct
+                        {% else %}
+                            wrong
+                        {% endif %}
+                    "
+                >
+
+
+                    <div class="answer-top">
+
+
+                        <div class="answer-question">
+
+                            {{ forloop.counter }}.
+
+                            {{ answer.question.question_text }}
+
+                        </div>
+
+
+                        {% if answer.is_correct %}
+
+                            <span class="status correct">
+                                ✓ Correct
+                            </span>
+
+                        {% else %}
+
+                            <span class="status wrong">
+                                ✕ Incorrect
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+
+                    <div class="answer-details">
+
+
+                        <div>
+
+                            Your answer:
+
+                            <strong>
+
+                                {% if answer.selected_answer %}
+
+                                    {{ answer.selected_answer }}
+
+                                {% else %}
+
+                                    Not answered
+
+                                {% endif %}
+
+                            </strong>
+
+                        </div>
+
+
+                        {% if not answer.is_correct %}
+
+                            <div>
+
+                                Correct answer:
+
+                                <strong>
+                                    {{ answer.question.correct_answer }}
+                                </strong>
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <div>
+
+                            Skill:
+
+                            <strong>
+                                {{ answer.question.get_skill_display }}
+                            </strong>
+
+                        </div>
+
+
+                        {% if answer.question.explanation %}
+
+                            <div>
+
+                                Explanation:
+
+                                <strong>
+                                    {{ answer.question.explanation }}
+                                </strong>
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            {% empty %}
+
+                <p>
+                    No answers found.
+                </p>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+
+
+    <!-- NEXT STEP -->
+
+    <section class="cta">
+
+
+        <h2>
+            Ready for your personalized path? 🚀
+        </h2>
+
+
+        <p>
+            Your assessment has identified your strengths
+            and skill gaps. The next step is to turn these
+            results into a personalized career roadmap.
+        </p>
+
+
+        <div class="cta-buttons">
+
+
+            <a
+                href="/roadmap/"
+                class="btn btn-primary"
+            >
+                Build My Roadmap →
+            </a>
+
+
+            <a
+                href="/dashboard/"
+                class="btn btn-secondary"
+            >
+                Back to Dashboard
+            </a>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+</body>
+
+</html>

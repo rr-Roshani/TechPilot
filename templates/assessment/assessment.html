@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% if is_roadmap_test %}Roadmap Skill Test{% else %}Skill Assessment{% endif %} | TechPilot</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Inter, Arial, sans-serif;
+            background: #f6f7fb;
+            color: #171827;
+            min-height: 100vh;
+        }
+
+        /* =========================
+           TOP BAR
+        ========================= */
+
+        .topbar {
+            height: 72px;
+            background: #ffffff;
+            border-bottom: 1px solid #e8e8ef;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 7%;
+        }
+
+        .logo {
+            font-size: 23px;
+            font-weight: 800;
+            color: #171827;
+        }
+
+        .logo span {
+            background: linear-gradient(
+                90deg,
+                #6c5ce7,
+                #9b59ff
+            );
+
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .back {
+            text-decoration: none;
+            color: #666778;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .back:hover {
+            color: #6c5ce7;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .container {
+            max-width: 900px;
+            margin: 45px auto;
+            padding: 0 20px;
+        }
+
+        /* =========================
+           INTRO
+        ========================= */
+
+        .intro {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .badge {
+            display: inline-block;
+
+            padding: 7px 14px;
+
+            border-radius: 30px;
+
+            background: #eeeafd;
+            color: #6554d8;
+
+            font-size: 13px;
+            font-weight: 800;
+
+            margin-bottom: 14px;
+        }
+
+        .intro h1 {
+            font-size: 38px;
+            margin-bottom: 10px;
+        }
+
+        .intro p {
+            color: #717282;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        /* =========================
+           ASSESSMENT CARD
+        ========================= */
+
+        .assessment-card {
+            background: white;
+
+            border: 1px solid #e8e8ef;
+            border-radius: 22px;
+
+            padding: 35px;
+
+            box-shadow:
+                0 15px 40px
+                rgba(30, 30, 60, 0.06);
+        }
+
+        /* =========================
+           PROGRESS
+        ========================= */
+
+        .progress-area {
+            margin-bottom: 30px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+
+            font-size: 14px;
+            font-weight: 700;
+
+            margin-bottom: 9px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+
+            background: #ececf2;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #6c5ce7,
+                    #9b59ff
+                );
+
+            border-radius: 20px;
+
+            transition: width 0.3s ease;
+        }
+
+        /* =========================
+           QUESTION
+        ========================= */
+
+        .question-slide {
+            animation: fadeIn 0.25s ease;
+        }
+
+        @keyframes fadeIn {
+
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .skill-tag {
+            display: inline-block;
+
+            background: #f0efff;
+            color: #6554d8;
+
+            padding: 7px 12px;
+
+            border-radius: 8px;
+
+            font-size: 12px;
+            font-weight: 800;
+
+            margin-bottom: 17px;
+
+            text-transform: uppercase;
+        }
+
+        .question-number {
+            color: #858695;
+
+            font-size: 14px;
+
+            margin-bottom: 10px;
+        }
+
+        .question {
+            font-size: 24px;
+            line-height: 1.4;
+
+            margin-bottom: 28px;
+        }
+
+        /* =========================
+           OPTIONS
+        ========================= */
+
+        .options {
+            display: grid;
+            gap: 13px;
+        }
+
+        .option {
+            position: relative;
+        }
+
+        .option input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .option label {
+            display: flex;
+            align-items: center;
+
+            gap: 15px;
+
+            padding: 17px 18px;
+
+            border: 2px solid #e7e7ee;
+            border-radius: 13px;
+
+            cursor: pointer;
+
+            transition: 0.2s ease;
+
+            font-size: 15px;
+
+            line-height: 1.4;
+        }
+
+        .option label:hover {
+            border-color: #a99ef3;
+            background: #faf9ff;
+        }
+
+        .option input:checked + label {
+            border-color: #6c5ce7;
+            background: #f4f2ff;
+        }
+
+        .letter {
+            min-width: 34px;
+            width: 34px;
+            height: 34px;
+
+            border-radius: 9px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #f0f0f5;
+
+            font-weight: 800;
+            color: #555666;
+        }
+
+        .option input:checked + label .letter {
+            background: #6c5ce7;
+            color: white;
+        }
+
+        /* =========================
+           ACTION BUTTONS
+        ========================= */
+
+        .actions {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            margin-top: 30px;
+        }
+
+        button {
+            border: none;
+
+            cursor: pointer;
+
+            font-size: 14px;
+            font-weight: 800;
+
+            border-radius: 11px;
+
+            padding: 13px 23px;
+
+            transition: 0.2s ease;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+        }
+
+        .previous {
+            background: #eeeeF4;
+            color: #555666;
+        }
+
+        .previous:hover {
+            background: #e5e5ed;
+        }
+
+        .next {
+            background:
+                linear-gradient(
+                    90deg,
+                    #6c5ce7,
+                    #9b59ff
+                );
+
+            color: white;
+        }
+
+        .next:hover {
+            box-shadow:
+                0 8px 20px
+                rgba(108, 92, 231, 0.25);
+        }
+
+        .submit {
+            background: #171827;
+            color: white;
+
+            display: none;
+        }
+
+        .submit:hover {
+            background: #292a3c;
+        }
+
+        /* =========================
+           EMPTY STATE
+        ========================= */
+
+        .empty {
+            text-align: center;
+            padding: 50px;
+        }
+
+        .empty h2 {
+            margin-bottom: 10px;
+        }
+
+        .empty p {
+            color: #777;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 600px) {
+
+            .topbar {
+                padding: 0 20px;
+            }
+
+            .container {
+                margin: 25px auto;
+            }
+
+            .intro h1 {
+                font-size: 30px;
+            }
+
+            .intro p {
+                font-size: 14px;
+            }
+
+            .assessment-card {
+                padding: 23px;
+                border-radius: 17px;
+            }
+
+            .question {
+                font-size: 20px;
+            }
+
+            .option label {
+                padding: 14px;
+            }
+
+            .actions button {
+                padding: 12px 17px;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     TOP BAR
+========================= -->
+
+<header class="topbar">
+
+    <div class="logo">
+        Tech<span>Pilot</span>
+    </div>
+
+    <a
+        href="/dashboard/"
+        class="back"
+    >
+        ← Back to Dashboard
+    </a>
+
+</header>
+
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="container">
+
+
+    <!-- INTRO -->
+
+    <div class="intro">
+
+        <div class="badge">
+            {% if is_roadmap_test %}ROADMAP SKILL TEST{% else %}SKILL ASSESSMENT{% endif %}
+        </div>
+
+        <h1>
+            {% if is_roadmap_test %}Test your roadmap progress.{% else %}Let's understand your skills.{% endif %}
+        </h1>
+
+        <p>
+            {% if is_roadmap_test %}
+                Answer all {{ questions|length }} questions, then submit to see your score.
+            {% else %}
+                Answer honestly. Your results will help TechPilot personalize your roadmap.
+            {% endif %}
+        </p>
+
+    </div>
+
+
+
+    {% if error %}
+        <div role="alert" style="margin:0 auto 20px;padding:14px 18px;max-width:900px;border:1px solid #fecaca;border-radius:12px;background:#fef2f2;color:#b91c1c;font-weight:700;">
+            {{ error }}
+        </div>
+    {% endif %}
+
+    {% for message in messages %}
+        <div role="status" style="margin:0 auto 20px;padding:14px 18px;max-width:900px;border:1px solid #fecaca;border-radius:12px;background:#fef2f2;color:#b91c1c;font-weight:700;">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% if completed_attempt %}
+
+        <section class="assessment-card empty" aria-live="polite">
+            <h2>Assessment complete</h2>
+            <p>Your latest completed assessment score is <strong>{{ completed_attempt.score }}%</strong>.</p>
+            <p>Your previous answers and results are saved. Restart only when you are ready to take a new assessment.</p>
+            <div class="actions" style="margin-top:24px;">
+                <a class="previous" href="{% url 'assessment_result' completed_attempt.id %}">Review Results</a>
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <button type="submit" class="submit" name="action" value="restart">
+                        Restart Assessment
+                    </button>
+                </form>
+            </div>
+        </section>
+
+    {% elif questions %}
+
+    <!-- =========================
+         FORM
+    ========================= -->
+
+    <form
+        method="POST"
+        action=""
+        id="assessmentForm"
+    >
+
+        {% csrf_token %}
+        <input type="hidden" name="attempt_id" value="{{ attempt.id }}">
+
+
+        <div class="assessment-card">
+
+
+            <!-- PROGRESS -->
+
+            <div class="progress-area">
+
+                <div class="progress-info">
+
+                    <span id="progressText">
+                        Question 1 of {{ questions|length }}
+                    </span>
+
+                    <span id="percentage">
+                        7%
+                    </span>
+
+                </div>
+
+
+                <div class="progress-bar">
+
+                    <div
+                        class="progress-fill"
+                        id="progressFill"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =========================
+                 QUESTIONS
+            ========================= -->
+
+            {% for question in questions %}
+
+            <div
+                class="question-slide"
+                data-index="{{ forloop.counter0 }}"
+                style="{% if not forloop.first %}display:none;{% endif %}"
+            >
+
+                <!-- Hidden question ID -->
+
+                <input
+                    type="hidden"
+                    name="question_id"
+                    value="{{ question.id }}"
+                >
+
+
+                <!-- Skill -->
+
+                <div class="skill-tag">
+
+                    {{ question.get_skill_display }}
+
+                </div>
+
+
+                <!-- Question number -->
+
+                <div class="question-number">
+
+                    Question {{ forloop.counter }}
+
+                </div>
+
+
+                <!-- Question -->
+
+                <h2 class="question">
+
+                    {{ question.question_text }}
+
+                </h2>
+
+
+
+                <!-- OPTIONS -->
+
+                <div class="options">
+
+
+                    <!-- A -->
+
+                    <div class="option">
+
+                        <input
+                            type="radio"
+                            id="q{{ question.id }}A"
+                            name="question_{{ question.id }}"
+                            value="A"
+                        >
+
+                        <label
+                            for="q{{ question.id }}A"
+                        >
+
+                            <span class="letter">
+                                A
+                            </span>
+
+                            <span>
+                                {{ question.option_a }}
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+
+                    <!-- B -->
+
+                    <div class="option">
+
+                        <input
+                            type="radio"
+                            id="q{{ question.id }}B"
+                            name="question_{{ question.id }}"
+                            value="B"
+                        >
+
+                        <label
+                            for="q{{ question.id }}B"
+                        >
+
+                            <span class="letter">
+                                B
+                            </span>
+
+                            <span>
+                                {{ question.option_b }}
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+
+                    <!-- C -->
+
+                    <div class="option">
+
+                        <input
+                            type="radio"
+                            id="q{{ question.id }}C"
+                            name="question_{{ question.id }}"
+                            value="C"
+                        >
+
+                        <label
+                            for="q{{ question.id }}C"
+                        >
+
+                            <span class="letter">
+                                C
+                            </span>
+
+                            <span>
+                                {{ question.option_c }}
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+
+                    <!-- D -->
+
+                    <div class="option">
+
+                        <input
+                            type="radio"
+                            id="q{{ question.id }}D"
+                            name="question_{{ question.id }}"
+                            value="D"
+                        >
+
+                        <label
+                            for="q{{ question.id }}D"
+                        >
+
+                            <span class="letter">
+                                D
+                            </span>
+
+                            <span>
+                                {{ question.option_d }}
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+
+
+            <!-- =========================
+                 ACTIONS
+            ========================= -->
+
+            <div class="actions">
+
+
+                <button
+                    type="button"
+                    class="previous"
+                    id="previousBtn"
+                    onclick="previousQuestion()"
+                >
+                    ← Previous
+                </button>
+
+
+                <button
+                    type="button"
+                    class="next"
+                    id="nextBtn"
+                    onclick="nextQuestion()"
+                >
+                    Next →
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="submit"
+                    id="submitBtn"
+                >
+                    Submit Assessment ✓
+                </button>
+
+            </div>
+
+
+        </div>
+
+    </form>
+
+
+    {% else %}
+
+    <!-- EMPTY -->
+
+    <div class="assessment-card empty">
+
+        <h2>
+            No questions available
+        </h2>
+
+        <p>
+            Please add questions from the Django Admin Panel.
+        </p>
+
+    </div>
+
+    {% endif %}
+
+
+</main>
+
+
+
+<script>
+
+    /* =========================
+       QUESTIONS
+    ========================= */
+
+    const slides =
+        document.querySelectorAll(
+            ".question-slide"
+        );
+
+
+    let currentQuestion = 0;
+
+
+    const totalQuestions =
+        slides.length;
+
+
+
+    /* =========================
+       UPDATE PROGRESS
+    ========================= */
+
+    function updateProgress() {
+
+        if (totalQuestions === 0) {
+            return;
+        }
+
+
+        const percentage =
+            Math.round(
+                (
+                    (currentQuestion + 1)
+                    / totalQuestions
+                ) * 100
+            );
+
+
+        document.getElementById(
+            "progressText"
+        ).innerText =
+            `Question ${currentQuestion + 1} of ${totalQuestions}`;
+
+
+        document.getElementById(
+            "percentage"
+        ).innerText =
+            `${percentage}%`;
+
+
+        document.getElementById(
+            "progressFill"
+        ).style.width =
+            `${percentage}%`;
+
+
+        /* Previous button */
+
+        document.getElementById(
+            "previousBtn"
+        ).style.visibility =
+            currentQuestion === 0
+                ? "hidden"
+                : "visible";
+
+
+        /* Last question */
+
+        if (
+            currentQuestion
+            === totalQuestions - 1
+        ) {
+
+            document.getElementById(
+                "nextBtn"
+            ).style.display =
+                "none";
+
+
+            document.getElementById(
+                "submitBtn"
+            ).style.display =
+                "block";
+
+        } else {
+
+            document.getElementById(
+                "nextBtn"
+            ).style.display =
+                "block";
+
+
+            document.getElementById(
+                "submitBtn"
+            ).style.display =
+                "none";
+        }
+
+    }
+
+
+
+    /* =========================
+       SHOW QUESTION
+    ========================= */
+
+    function showQuestion(index) {
+
+        slides.forEach(
+            (slide, i) => {
+
+                slide.style.display =
+                    i === index
+                        ? "block"
+                        : "none";
+
+            }
+        );
+
+
+        currentQuestion = index;
+
+
+        updateProgress();
+
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    }
+
+
+
+    /* =========================
+       CHECK ANSWER
+    ========================= */
+
+    function hasAnswer() {
+
+        const currentSlide =
+            slides[currentQuestion];
+
+
+        return currentSlide.querySelector(
+            'input[type="radio"]:checked'
+        ) !== null;
+
+    }
+
+
+
+    /* =========================
+       NEXT
+    ========================= */
+
+    function nextQuestion() {
+
+        if (!hasAnswer()) {
+
+            alert(
+                "Please select an answer before continuing."
+            );
+
+            return;
+        }
+
+
+        if (
+            currentQuestion
+            < totalQuestions - 1
+        ) {
+
+            showQuestion(
+                currentQuestion + 1
+            );
+
+        }
+
+    }
+
+
+
+    /* =========================
+       PREVIOUS
+    ========================= */
+
+    function previousQuestion() {
+
+        if (currentQuestion > 0) {
+
+            showQuestion(
+                currentQuestion - 1
+            );
+
+        }
+
+    }
+
+
+
+    /* =========================
+       SUBMIT VALIDATION
+    ========================= */
+
+    document
+        .getElementById("assessmentForm")
+        ?.addEventListener(
+            "submit",
+            function(event) {
+
+                /*
+                 * Check every question.
+                 */
+
+                for (
+                    let i = 0;
+                    i < slides.length;
+                    i++
+                ) {
+
+                    const answer =
+                        slides[i].querySelector(
+                            'input[type="radio"]:checked'
+                        );
+
+
+                    if (!answer) {
+
+                        event.preventDefault();
+
+
+                        alert(
+                            `Please answer Question ${i + 1} before submitting.`
+                        );
+
+
+                        showQuestion(i);
+
+
+                        return;
+                    }
+
+                }
+
+
+                /*
+                 * Prevent double submission.
+                 */
+
+                const submitButton =
+                    document.getElementById(
+                        "submitBtn"
+                    );
+
+
+                submitButton.disabled = true;
+
+
+                submitButton.innerText =
+                    "Submitting...";
+
+
+            }
+        );
+
+
+
+    /* =========================
+       INITIALIZE
+    ========================= */
+
+    if (totalQuestions > 0) {
+
+        updateProgress();
+
+    }
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,2411 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Set Up Your Journey | TechPilot</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/onboarding.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+
+<div class="page">
+
+    <div class="onboarding">
+
+
+        <!-- =====================================================
+             LEFT PANEL
+        ====================================================== -->
+
+<aside class="sidebar">
+
+    <div class="sidebar-logo">
+        <div class="logo-mark">T</div>
+
+        <div>
+            <h2>TechPilot</h2>
+            <span>Career Workspace</span>
+        </div>
+    </div>
+
+
+    <nav class="sidebar-nav">
+
+        <a href="{% url 'dashboard' %}"
+           class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+            <span class="nav-icon">⌂</span>
+            <span>Dashboard</span>
+        </a>
+
+
+        <a href="{% url 'roadmap' %}"
+           class="nav-item {% if request.resolver_match.url_name == 'roadmap' %}active{% endif %}">
+            <span class="nav-icon">◈</span>
+            <span>My Roadmap</span>
+        </a>
+
+
+        <a href="{% url 'missions' %}"
+           class="nav-item {% if request.resolver_match.url_name == 'missions' %}active{% endif %}">
+            <span class="nav-icon">✓</span>
+            <span>Daily Missions</span>
+        </a>
+
+
+        <a href="{% url 'assessment' %}"
+           class="nav-item {% if request.resolver_match.url_name == 'assessment' or request.resolver_match.url_name == 'assessment_result' %}active{% endif %}">
+            <span class="nav-icon">◎</span>
+            <span>Assessment</span>
+        </a>
+
+
+        <!--
+        PRACTICE — NOT READY YET
+
+        <a href="{% url 'practice' %}"
+           class="nav-item {% if request.resolver_match.url_name == 'practice' %}active{% endif %}">
+            <span class="nav-icon">⌘</span>
+            <span>Practice</span>
+        </a>
+        -->
+
+
+        <!--
+        PROJECTS — NOT READY YET
+
+        <a href="{% url 'projects' %}"
+           class="nav-item {% if request.resolver_match.url_name == 'projects' %}active{% endif %}">
+            <span class="nav-icon">▣</span>
+            <span>Projects</span>
+        </a>
+        -->
+
+
+        <!--
+        JOBS — NOT READY YET
+
+        <a href="{% url 'jobs' %}"
+           class="nav-item {% if request.resolver_match.url_name == 'jobs' %}active{% endif %}">
+            <span class="nav-icon">▤</span>
+            <span>Jobs</span>
+        </a>
+        -->
+
+
+        <!--
+        INTERVIEWS — NOT READY YET
+
+        <a href="{% url 'interviews' %}"
+           class="nav-item {% if request.resolver_match.url_name == 'interviews' %}active{% endif %}">
+            <span class="nav-icon">◉</span>
+            <span>Interview</span>
+        </a>
+        -->
+
+    </nav>
+
+
+    <div class="sidebar-bottom">
+
+        <a href="{% url 'profile' %}"
+           class="nav-item {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+            <span class="nav-icon">●</span>
+            <span>My Profile</span>
+        </a>
+
+
+        <a href="{% url 'logout' %}" class="nav-item">
+            <span class="nav-icon">↪</span>
+            <span>Logout</span>
+        </a>
+
+    </div>
+
+</aside>
+
+
+
+        <!-- =====================================================
+             RIGHT PANEL
+        ====================================================== -->
+
+        <main class="right">
+
+            {% if messages %}
+                <div class="onboarding-messages" role="status">
+                    {% for message in messages %}
+                        <div class="onboarding-message {{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="top-row">
+
+                <div class="plan-label">
+                    YOUR PERSONAL PLAN
+                </div>
+
+                <div
+                    class="step-counter"
+                    id="stepCounter"
+                >
+                    Step 1 of 4
+                </div>
+
+            </div>
+
+
+            <div class="progress">
+
+                <div
+                    class="progress-bar"
+                    id="progressBar"
+                >
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 FORM
+            ================================================== -->
+
+            <form
+                method="POST"
+                action="{% url 'onboarding' %}"
+                id="onboardingForm"
+            >
+
+                {% csrf_token %}
+
+
+
+                <!-- =================================================
+                     STEP 1
+                ================================================== -->
+
+                <section
+                    class="step active"
+                    data-step="1"
+                >
+
+                    <h2 class="step-title">
+                        Tell us about you 👋
+                    </h2>
+
+
+                    <p class="step-subtitle">
+                        This helps TechPilot understand your academic background.
+                    </p>
+
+
+
+                    <!-- EDUCATION -->
+
+                    <div class="form-group">
+
+                        <label class="label">
+
+                            Education Level
+                            <span class="required">*</span>
+
+                        </label>
+
+
+                        <select
+                            name="education"
+                            id="education"
+                            class="select"
+                            required
+                        >
+
+                            <option value="">
+                                Select your education
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- YEAR + SPECIALIZATION -->
+
+                    <div class="two-columns">
+
+
+                        <div class="form-group">
+
+                            <label class="label">
+
+                                Current Year
+                                <span class="required">*</span>
+
+                            </label>
+
+
+                            <select
+                                name="year"
+                                class="select"
+                                required
+                            >
+
+                                <option value="">
+                                    Select year
+                                </option>
+
+                                <option value="1st Year">
+                                    1st Year
+                                </option>
+
+                                <option value="2nd Year">
+                                    2nd Year
+                                </option>
+
+                                <option value="3rd Year">
+                                    3rd Year
+                                </option>
+
+                                <option value="Final Year">
+                                    Final Year
+                                </option>
+
+                                <option value="Graduate">
+                                    Graduate
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label class="label">
+
+                                Course / Specialization
+                                <span class="required">*</span>
+
+                            </label>
+
+
+                            <select
+                                name="specialization"
+                                id="specialization"
+                                class="select"
+                                required
+                            >
+
+                                <option value="">
+                                    Select education first
+                                </option>
+
+                            </select>
+
+
+                            <!-- MANUAL SPECIALIZATION -->
+
+                            <input
+                                type="text"
+                                name="other_specialization"
+                                id="otherSpecialization"
+                                class="input other-input"
+                                placeholder="Enter your specialization"
+                                maxlength="150"
+                                style="display:none;"
+                            >
+
+                        </div>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================================
+                     STEP 2
+                ================================================== -->
+
+                <section
+                    class="step"
+                    data-step="2"
+                >
+
+                    <h2 class="step-title">
+                        Where do you want to go? 🎯
+                    </h2>
+
+
+                    <p class="step-subtitle">
+                        Based on your education and specialization,
+                        here are career paths that may match your journey.
+                    </p>
+
+
+                    <!-- JSON GENERATED CAREER OPTIONS -->
+
+                    <div
+                        class="career-grid"
+                        id="careerGrid"
+                    >
+                    </div>
+
+
+                    <!-- MANUAL CAREER -->
+
+                    <input
+                        type="text"
+                        name="other_career"
+                        id="otherCareer"
+                        class="input other-input"
+                        placeholder="Enter your career goal"
+                        maxlength="100"
+                        style="display:none;"
+                    >
+
+
+                </section>
+
+
+
+                <!-- =================================================
+                     STEP 3
+                ================================================== -->
+
+                <section
+                    class="step"
+                    data-step="3"
+                >
+
+                    <h2 class="step-title">
+                        What do you already know? 🧠
+                    </h2>
+
+
+                    <p class="step-subtitle">
+                        Select the technologies you've worked with.
+                        You can also add a technology manually.
+                    </p>
+
+
+                    <div class="form-group">
+
+
+                        <label class="label">
+                            Your skills
+                        </label>
+
+
+                        <div
+                            class="skills-grid"
+                            id="skillsGrid"
+                        >
+                        </div>
+
+
+                        <!-- MANUAL SKILL -->
+
+                        <input
+                            type="text"
+                            name="other_skill"
+                            id="otherSkill"
+                            class="input other-input"
+                            placeholder="Enter another skill"
+                            maxlength="80"
+                            style="display:none;"
+                        >
+
+                    </div>
+
+
+
+                    <!-- SKILL LEVEL -->
+
+                    <div class="form-group">
+
+                        <label class="label">
+
+                            Overall skill level
+                            <span class="required">*</span>
+
+                        </label>
+
+
+                        <div class="level-grid">
+
+
+                            <div class="level-option">
+
+                                <input
+                                    type="radio"
+                                    name="skill_level"
+                                    value="Beginner"
+                                    id="level1"
+                                    required
+                                >
+
+                                <label
+                                    for="level1"
+                                    class="level-card"
+                                >
+                                    🌱 Beginner
+                                </label>
+
+                            </div>
+
+
+                            <div class="level-option">
+
+                                <input
+                                    type="radio"
+                                    name="skill_level"
+                                    value="Intermediate"
+                                    id="level2"
+                                >
+
+                                <label
+                                    for="level2"
+                                    class="level-card"
+                                >
+                                    🚀 Intermediate
+                                </label>
+
+                            </div>
+
+
+                            <div class="level-option">
+
+                                <input
+                                    type="radio"
+                                    name="skill_level"
+                                    value="Advanced"
+                                    id="level3"
+                                >
+
+                                <label
+                                    for="level3"
+                                    class="level-card"
+                                >
+                                    ⚡ Advanced
+                                </label>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================================
+                     STEP 4
+                ================================================== -->
+
+                <section
+                    class="step"
+                    data-step="4"
+                >
+
+                    <h2 class="step-title">
+                        Make it fit your life ⚡
+                    </h2>
+
+
+                    <p class="step-subtitle">
+                        Your plan should work around your schedule —
+                        not the other way around.
+                    </p>
+
+
+
+                    <!-- PREPARATION -->
+
+                    <div class="form-group">
+
+                        <label class="label">
+
+                            What are you preparing for?
+                            <span class="required">*</span>
+
+                        </label>
+
+
+                        <div class="prep-grid">
+
+
+                            <div class="prep-option">
+
+                                <input
+                                    type="radio"
+                                    name="preparation"
+                                    value="Placement"
+                                    id="prep1"
+                                    required
+                                >
+
+                                <label
+                                    for="prep1"
+                                    class="prep-card"
+                                >
+                                    💼 &nbsp; Placement
+                                </label>
+
+                            </div>
+
+
+                            <div class="prep-option">
+
+                                <input
+                                    type="radio"
+                                    name="preparation"
+                                    value="Internship"
+                                    id="prep2"
+                                >
+
+                                <label
+                                    for="prep2"
+                                    class="prep-card"
+                                >
+                                    🚀 &nbsp; Internship
+                                </label>
+
+                            </div>
+
+
+                            <div class="prep-option">
+
+                                <input
+                                    type="radio"
+                                    name="preparation"
+                                    value="Career Switch"
+                                    id="prep3"
+                                >
+
+                                <label
+                                    for="prep3"
+                                    class="prep-card"
+                                >
+                                    🔄 &nbsp; Career Switch
+                                </label>
+
+                            </div>
+
+
+                            <div class="prep-option">
+
+                                <input
+                                    type="radio"
+                                    name="preparation"
+                                    value="Skill Building"
+                                    id="prep4"
+                                >
+
+                                <label
+                                    for="prep4"
+                                    class="prep-card"
+                                >
+                                    📚 &nbsp; Skill Building
+                                </label>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- STUDY TIME -->
+
+                    <div class="form-group">
+
+                        <label class="label">
+
+                            How much time can you give daily?
+                            <span class="required">*</span>
+
+                        </label>
+
+
+                        <div class="time-grid">
+
+
+                            <div class="time-option">
+
+                                <input
+                                    type="radio"
+                                    name="study_time"
+                                    value="30"
+                                    id="time1"
+                                    required
+                                >
+
+                                <label
+                                    for="time1"
+                                    class="time-card"
+                                >
+                                    30 min
+                                </label>
+
+                            </div>
+
+
+                            <div class="time-option">
+
+                                <input
+                                    type="radio"
+                                    name="study_time"
+                                    value="60"
+                                    id="time2"
+                                >
+
+                                <label
+                                    for="time2"
+                                    class="time-card"
+                                >
+                                    1 hour
+                                </label>
+
+                            </div>
+
+
+                            <div class="time-option">
+
+                                <input
+                                    type="radio"
+                                    name="study_time"
+                                    value="120"
+                                    id="time3"
+                                >
+
+                                <label
+                                    for="time3"
+                                    class="time-card"
+                                >
+                                    2 hours
+                                </label>
+
+                            </div>
+
+
+                            <div class="time-option">
+
+                                <input
+                                    type="radio"
+                                    name="study_time"
+                                    value="180"
+                                    id="time4"
+                                >
+
+                                <label
+                                    for="time4"
+                                    class="time-card"
+                                >
+                                    3+ hours
+                                </label>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================================
+                     BUTTONS
+                ================================================== -->
+
+                <div class="buttons">
+
+
+                    <button
+                        type="button"
+                        class="btn back-btn"
+                        id="backButton"
+                        onclick="previousStep()"
+                    >
+                        ← Back
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="btn next-btn"
+                        id="nextButton"
+                        onclick="nextStep()"
+                    >
+                        Continue →
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="btn submit-btn"
+                        id="submitButton"
+                        style="display:none;"
+                    >
+                        Build My Plan ✨
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+        </main>
+
+    </div>
+
+</div>
+
+
+
+<!-- ============================================================
+     JSON DATA SOURCE
+     
+     ALL ON-SCREEN DYNAMIC DATA COMES FROM HERE.
+============================================================= -->
+
+<script
+    type="application/json"
+    id="onboarding-data"
+>
+{
+    "education": [
+        {
+            "value": "MCA",
+            "label": "MCA",
+            "specializations": [
+                "Cloud Computing",
+                "Cyber Security",
+                "Artificial Intelligence & Machine Learning",
+                "Data Science",
+                "Data Analytics",
+                "Full Stack Development",
+                "Software Engineering",
+                "Web Development",
+                "Mobile Application Development",
+                "Database Management",
+                "DevOps",
+                "Computer Applications"
+            ]
+        },
+
+        {
+            "value": "BCA",
+            "label": "BCA",
+            "specializations": [
+                "Computer Applications",
+                "Cloud Computing",
+                "Cyber Security",
+                "Artificial Intelligence & Machine Learning",
+                "Data Science",
+                "Data Analytics",
+                "Full Stack Development",
+                "Software Development",
+                "Web Development",
+                "Mobile Application Development",
+                "Database Management",
+                "DevOps"
+            ]
+        },
+
+        {
+            "value": "BTECH",
+            "label": "B.Tech / B.E.",
+            "specializations": [
+                "Computer Science & Engineering",
+                "Information Technology",
+                "Artificial Intelligence & Machine Learning",
+                "Data Science",
+                "Cyber Security",
+                "Cloud Computing",
+                "Software Engineering",
+                "Electronics & Communication",
+                "Internet of Things",
+                "Robotics",
+                "DevOps",
+                "Information Security"
+            ]
+        },
+
+        {
+            "value": "DIPLOMA",
+            "label": "Diploma",
+            "specializations": [
+                "Computer Engineering",
+                "Information Technology",
+                "Software Development",
+                "Web Development",
+                "Networking",
+                "Cyber Security",
+                "Cloud Computing",
+                "Database Management",
+                "Hardware & Networking"
+            ]
+        },
+
+        {
+            "value": "OTHER",
+            "label": "Other",
+            "specializations": [
+                "Computer Science",
+                "Information Technology",
+                "Software Development",
+                "Data & Analytics",
+                "Cloud Computing",
+                "Cyber Security",
+                "Other"
+            ]
+        }
+    ],
+
+
+    "careers": {
+
+        "Cloud Computing": [
+            "Cloud Engineer",
+            "DevOps Engineer",
+            "Cloud Security Engineer",
+            "Site Reliability Engineer",
+            "Cloud Solutions Architect",
+            "Backend Developer",
+            "Software Engineer"
+        ],
+
+        "Cyber Security": [
+            "Cybersecurity Analyst",
+            "Security Engineer",
+            "Cloud Security Engineer",
+            "SOC Analyst",
+            "Application Security Engineer",
+            "Penetration Testing",
+            "Security Consultant"
+        ],
+
+        "Artificial Intelligence & Machine Learning": [
+            "AI/ML Engineer",
+            "Machine Learning Engineer",
+            "Data Scientist",
+            "AI Research Engineer",
+            "Python Developer",
+            "Data Analyst",
+            "Software Engineer"
+        ],
+
+        "Data Science": [
+            "Data Scientist",
+            "Machine Learning Engineer",
+            "Data Analyst",
+            "Business Intelligence Analyst",
+            "Data Engineer",
+            "AI/ML Engineer",
+            "Python Developer"
+        ],
+
+        "Data Analytics": [
+            "Data Analyst",
+            "Business Analyst",
+            "Business Intelligence Analyst",
+            "Data Scientist",
+            "Data Visualization Analyst",
+            "Reporting Analyst",
+            "SQL Developer"
+        ],
+
+        "Full Stack Development": [
+            "Full Stack Developer",
+            "Frontend Developer",
+            "Backend Developer",
+            "Software Engineer",
+            "Web Developer",
+            "API Developer",
+            "DevOps Engineer"
+        ],
+
+        "Software Engineering": [
+            "Software Engineer",
+            "Backend Developer",
+            "Frontend Developer",
+            "Full Stack Developer",
+            "QA Automation Engineer",
+            "DevOps Engineer",
+            "Systems Engineer"
+        ],
+
+        "Software Development": [
+            "Software Engineer",
+            "Backend Developer",
+            "Frontend Developer",
+            "Full Stack Developer",
+            "Mobile App Developer",
+            "QA Automation Engineer",
+            "DevOps Engineer"
+        ],
+
+        "Web Development": [
+            "Frontend Developer",
+            "Backend Developer",
+            "Full Stack Developer",
+            "Web Developer",
+            "UI Engineer",
+            "JavaScript Developer",
+            "Software Engineer"
+        ],
+
+        "Mobile Application Development": [
+            "Android Developer",
+            "iOS Developer",
+            "Flutter Developer",
+            "React Native Developer",
+            "Mobile App Developer",
+            "Software Engineer"
+        ],
+
+        "Database Management": [
+            "Database Engineer",
+            "Database Administrator",
+            "SQL Developer",
+            "Data Engineer",
+            "Backend Developer",
+            "Data Analyst"
+        ],
+
+        "DevOps": [
+            "DevOps Engineer",
+            "Cloud Engineer",
+            "Site Reliability Engineer",
+            "Platform Engineer",
+            "Cloud Security Engineer",
+            "Infrastructure Engineer"
+        ],
+
+        "Computer Science & Engineering": [
+            "Software Engineer",
+            "Full Stack Developer",
+            "Backend Developer",
+            "Data Scientist",
+            "AI/ML Engineer",
+            "Cloud Engineer",
+            "Cybersecurity Analyst",
+            "DevOps Engineer"
+        ],
+
+        "Information Technology": [
+            "Software Engineer",
+            "Cloud Engineer",
+            "Network Engineer",
+            "Cybersecurity Analyst",
+            "IT Support Engineer",
+            "DevOps Engineer",
+            "Systems Administrator"
+        ],
+
+        "Information Security": [
+            "Cybersecurity Analyst",
+            "Security Engineer",
+            "SOC Analyst",
+            "Application Security Engineer",
+            "Cloud Security Engineer",
+            "Security Consultant"
+        ],
+
+        "Internet of Things": [
+            "IoT Developer",
+            "Embedded Systems Engineer",
+            "IoT Security Engineer",
+            "Cloud Engineer",
+            "Software Engineer"
+        ],
+
+        "Robotics": [
+            "Robotics Engineer",
+            "Automation Engineer",
+            "Embedded Systems Engineer",
+            "AI/ML Engineer",
+            "Computer Vision Engineer"
+        ],
+
+        "Electronics & Communication": [
+            "Embedded Systems Engineer",
+            "Network Engineer",
+            "IoT Developer",
+            "Telecom Engineer",
+            "Software Engineer"
+        ],
+
+        "Computer Applications": [
+            "Software Engineer",
+            "Full Stack Developer",
+            "Backend Developer",
+            "Data Analyst",
+            "Cloud Engineer",
+            "Cybersecurity Analyst",
+            "QA Automation Engineer"
+        ],
+
+        "Networking": [
+            "Network Engineer",
+            "Cloud Network Engineer",
+            "Network Security Engineer",
+            "System Administrator",
+            "Cloud Engineer",
+            "IT Support Engineer"
+        ],
+
+        "Hardware & Networking": [
+            "Network Engineer",
+            "System Administrator",
+            "Network Security Engineer",
+            "IT Support Engineer",
+            "Infrastructure Engineer"
+        ],
+
+        "Computer Science": [
+            "Software Engineer",
+            "Full Stack Developer",
+            "Backend Developer",
+            "Data Analyst",
+            "AI/ML Engineer",
+            "Cloud Engineer",
+            "Cybersecurity Analyst"
+        ],
+
+        "Data & Analytics": [
+            "Data Analyst",
+            "Data Scientist",
+            "Business Intelligence Analyst",
+            "Data Engineer",
+            "Business Analyst"
+        ],
+
+        "Other": [
+            "Software Engineer",
+            "Data Analyst",
+            "Cloud Engineer",
+            "Cybersecurity Analyst",
+            "Full Stack Developer",
+            "AI/ML Engineer",
+            "Other"
+        ]
+    },
+
+
+    "defaultCareers": [
+        "Software Engineer",
+        "Full Stack Developer",
+        "Frontend Developer",
+        "Backend Developer",
+        "Cloud Engineer",
+        "DevOps Engineer",
+        "Data Analyst",
+        "Data Scientist",
+        "AI/ML Engineer",
+        "Cybersecurity Analyst",
+        "Network Engineer",
+        "Database Engineer",
+        "QA Automation Engineer",
+        "UI/UX Designer",
+        "Mobile App Developer",
+        "Other"
+    ],
+
+
+    "skills": [
+        "Python",
+        "Java",
+        "C++",
+        "C",
+        "JavaScript",
+        "TypeScript",
+        "HTML",
+        "CSS",
+        "React",
+        "Angular",
+        "Vue.js",
+        "Django",
+        "Flask",
+        "FastAPI",
+        "Node.js",
+        "Express.js",
+        "SQL",
+        "MySQL",
+        "PostgreSQL",
+        "MongoDB",
+        "Git",
+        "GitHub",
+        "Linux",
+        "AWS",
+        "Azure",
+        "Google Cloud",
+        "Docker",
+        "Kubernetes",
+        "Terraform",
+        "Power BI",
+        "Tableau",
+        "Excel",
+        "Pandas",
+        "NumPy",
+        "Scikit-learn",
+        "TensorFlow",
+        "PyTorch",
+        "Networking",
+        "Cybersecurity",
+        "REST API",
+        "Data Structures",
+        "Algorithms"
+    ]
+}
+</script>
+
+
+
+<script>
+
+    /* =========================================================
+       READ JSON DATA
+    ========================================================== */
+
+    const dataElement =
+        document.getElementById("onboarding-data");
+
+
+    const onboardingData =
+        JSON.parse(dataElement.textContent);
+
+
+
+    /* =========================================================
+       ELEMENTS
+    ========================================================== */
+
+    const educationSelect =
+        document.getElementById("education");
+
+
+    const specializationSelect =
+        document.getElementById("specialization");
+
+
+    const otherSpecialization =
+        document.getElementById("otherSpecialization");
+
+
+    const careerGrid =
+        document.getElementById("careerGrid");
+
+
+    const otherCareer =
+        document.getElementById("otherCareer");
+
+
+    const skillsGrid =
+        document.getElementById("skillsGrid");
+
+
+    const otherSkill =
+        document.getElementById("otherSkill");
+
+
+    const steps =
+        document.querySelectorAll(".step");
+
+
+    const progressBar =
+        document.getElementById("progressBar");
+
+
+    const stepCounter =
+        document.getElementById("stepCounter");
+
+
+    const backButton =
+        document.getElementById("backButton");
+
+
+    const nextButton =
+        document.getElementById("nextButton");
+
+
+    const submitButton =
+        document.getElementById("submitButton");
+
+
+    const form =
+        document.getElementById("onboardingForm");
+
+
+
+    let currentStep = 1;
+
+    const totalSteps = 4;
+
+
+
+    /* =========================================================
+       EDUCATION DROPDOWN FROM JSON
+    ========================================================== */
+
+    function loadEducationOptions() {
+
+        educationSelect.innerHTML =
+            '<option value="">Select your education</option>';
+
+
+        onboardingData.education.forEach(
+            function(item) {
+
+                const option =
+                    document.createElement("option");
+
+                option.value =
+                    item.value;
+
+                option.textContent =
+                    item.label;
+
+                educationSelect.appendChild(option);
+
+            }
+        );
+
+    }
+
+
+
+    /* =========================================================
+       SPECIALIZATION BASED ON EDUCATION
+    ========================================================== */
+
+    function loadSpecializations() {
+
+        const selectedEducation =
+            educationSelect.value;
+
+
+        specializationSelect.innerHTML =
+            '<option value="">Select your specialization</option>';
+
+
+        otherSpecialization.style.display =
+            "none";
+
+
+        otherSpecialization.required =
+            false;
+
+
+        if (!selectedEducation) {
+
+            specializationSelect.innerHTML =
+                '<option value="">Select education first</option>';
+
+            return;
+
+        }
+
+
+        const education =
+            onboardingData.education.find(
+                function(item) {
+
+                    return item.value ===
+                        selectedEducation;
+
+                }
+            );
+
+
+        if (!education) {
+            return;
+        }
+
+
+        education.specializations.forEach(
+            function(specialization) {
+
+                const option =
+                    document.createElement("option");
+
+                option.value =
+                    specialization;
+
+                option.textContent =
+                    specialization;
+
+                specializationSelect.appendChild(
+                    option
+                );
+
+            }
+        );
+
+    }
+
+
+
+    educationSelect.addEventListener(
+        "change",
+        loadSpecializations
+    );
+
+
+
+    /* =========================================================
+       SPECIALIZATION OTHER
+    ========================================================== */
+
+    specializationSelect.addEventListener(
+        "change",
+        function() {
+
+            if (
+                specializationSelect.value ===
+                "Other"
+            ) {
+
+                otherSpecialization.style.display =
+                    "block";
+
+                otherSpecialization.required =
+                    true;
+
+                otherSpecialization.focus();
+
+            } else {
+
+                otherSpecialization.style.display =
+                    "none";
+
+                otherSpecialization.required =
+                    false;
+
+                otherSpecialization.value =
+                    "";
+
+            }
+
+
+            loadCareers();
+
+        }
+    );
+
+
+
+    /* =========================================================
+       CAREER OPTIONS
+    ========================================================== */
+
+    function loadCareers() {
+
+        careerGrid.innerHTML =
+            "";
+
+
+        const specialization =
+            specializationSelect.value;
+
+
+        let careers =
+            onboardingData.careers[
+                specialization
+            ];
+
+
+        if (
+            !careers ||
+            careers.length === 0
+        ) {
+
+            careers =
+                onboardingData.defaultCareers;
+
+        }
+
+
+        /*
+         Remove duplicates while keeping order.
+        */
+
+        careers =
+            [...new Set(careers)];
+
+
+        careers.forEach(
+            function(career, index) {
+
+                createCareerCard(
+                    career,
+                    index
+                );
+
+            }
+        );
+
+
+        /*
+         Always provide manual Other.
+        */
+
+        if (
+            !careers.includes("Other")
+        ) {
+
+            createCareerCard(
+                "Other",
+                careers.length
+            );
+
+        }
+
+    }
+
+
+
+    /* =========================================================
+       CREATE CAREER CARD
+    ========================================================== */
+
+    function createCareerCard(
+        career,
+        index
+    ) {
+
+        const wrapper =
+            document.createElement("div");
+
+        wrapper.className =
+            "career-option";
+
+
+        const input =
+            document.createElement("input");
+
+        input.type =
+            "radio";
+
+        input.name =
+            "career_goal";
+
+        input.value =
+            career;
+
+        input.id =
+            "career_" + index;
+
+
+        if (index === 0) {
+
+            input.required =
+                true;
+
+        }
+
+
+        const label =
+            document.createElement("label");
+
+        label.className =
+            "career-card";
+
+        label.htmlFor =
+            input.id;
+
+
+        const icon =
+            document.createElement("div");
+
+        icon.className =
+            "career-icon";
+
+
+        icon.textContent =
+            getCareerIcon(career);
+
+
+        const name =
+            document.createElement("div");
+
+        name.className =
+            "career-name";
+
+        name.textContent =
+            career;
+
+
+        const description =
+            document.createElement("div");
+
+        description.className =
+            "career-description";
+
+        description.textContent =
+            getCareerDescription(career);
+
+
+        label.appendChild(icon);
+
+        label.appendChild(name);
+
+        label.appendChild(description);
+
+
+        wrapper.appendChild(input);
+
+        wrapper.appendChild(label);
+
+
+        careerGrid.appendChild(wrapper);
+
+
+        input.addEventListener(
+            "change",
+            function() {
+
+                if (
+                    input.value ===
+                    "Other"
+                ) {
+
+                    otherCareer.style.display =
+                        "block";
+
+                    otherCareer.required =
+                        true;
+
+                    otherCareer.focus();
+
+                } else {
+
+                    otherCareer.style.display =
+                        "none";
+
+                    otherCareer.required =
+                        false;
+
+                    otherCareer.value =
+                        "";
+
+                }
+
+            }
+        );
+
+    }
+
+
+
+    /* =========================================================
+       CAREER ICONS
+    ========================================================== */
+
+    function getCareerIcon(career) {
+
+        const icons = {
+
+            "Software Engineer": "💻",
+
+            "Full Stack Developer": "🌐",
+
+            "Frontend Developer": "🎨",
+
+            "Backend Developer": "⚙️",
+
+            "Cloud Engineer": "☁️",
+
+            "DevOps Engineer": "♾️",
+
+            "Cloud Security Engineer": "🛡️",
+
+            "Site Reliability Engineer": "📡",
+
+            "Cloud Solutions Architect": "🏗️",
+
+            "Data Analyst": "📊",
+
+            "Data Scientist": "📈",
+
+            "Data Engineer": "🔧",
+
+            "Business Analyst": "💼",
+
+            "Business Intelligence Analyst": "📊",
+
+            "AI/ML Engineer": "🤖",
+
+            "Machine Learning Engineer": "🧠",
+
+            "AI Research Engineer": "🔬",
+
+            "Python Developer": "🐍",
+
+            "Cybersecurity Analyst": "🔐",
+
+            "Security Engineer": "🛡️",
+
+            "SOC Analyst": "🚨",
+
+            "Application Security Engineer": "🔒",
+
+            "Security Consultant": "🛡️",
+
+            "Network Engineer": "📡",
+
+            "Network Security Engineer": "🔐",
+
+            "Database Engineer": "🗄️",
+
+            "Database Administrator": "🗃️",
+
+            "SQL Developer": "💾",
+
+            "QA Automation Engineer": "🧪",
+
+            "Mobile App Developer": "📱",
+
+            "Android Developer": "📱",
+
+            "iOS Developer": "📱",
+
+            "Flutter Developer": "📱",
+
+            "React Native Developer": "📱",
+
+            "UI/UX Designer": "✏️",
+
+            "IoT Developer": "🌐",
+
+            "Robotics Engineer": "🤖",
+
+            "Automation Engineer": "⚙️",
+
+            "Embedded Systems Engineer": "🔌",
+
+            "Systems Engineer": "🖥️",
+
+            "System Administrator": "🛠️",
+
+            "IT Support Engineer": "🧰",
+
+            "Other": "🧭"
+
+        };
+
+
+        return icons[career] || "🚀";
+
+    }
+
+
+
+    /* =========================================================
+       CAREER DESCRIPTION
+    ========================================================== */
+
+    function getCareerDescription(career) {
+
+        const descriptions = {
+
+            "Software Engineer":
+                "Build scalable software systems",
+
+            "Full Stack Developer":
+                "Frontend + backend development",
+
+            "Frontend Developer":
+                "Modern web interfaces",
+
+            "Backend Developer":
+                "APIs and server-side systems",
+
+            "Cloud Engineer":
+                "Cloud infrastructure and platforms",
+
+            "DevOps Engineer":
+                "Automation, CI/CD and infrastructure",
+
+            "Data Analyst":
+                "Data and business insights",
+
+            "Data Scientist":
+                "Statistics and predictive models",
+
+            "AI/ML Engineer":
+                "Artificial intelligence systems",
+
+            "Machine Learning Engineer":
+                "Machine learning applications",
+
+            "Cybersecurity Analyst":
+                "Security monitoring and defence",
+
+            "Network Engineer":
+                "Networks and infrastructure",
+
+            "Database Engineer":
+                "Database systems and performance",
+
+            "Mobile App Developer":
+                "Android and iOS applications",
+
+            "QA Automation Engineer":
+                "Testing and automation",
+
+            "UI/UX Designer":
+                "Product and user experience",
+
+            "Other":
+                "Enter your own career goal"
+
+        };
+
+
+        return descriptions[career] ||
+            "Build your technology career";
+
+    }
+
+
+
+    /* =========================================================
+       SKILLS FROM JSON
+    ========================================================== */
+
+    function loadSkills() {
+
+        skillsGrid.innerHTML =
+            "";
+
+
+        onboardingData.skills.forEach(
+            function(skill, index) {
+
+                createSkill(
+                    skill,
+                    index
+                );
+
+            }
+        );
+
+
+        createSkill(
+            "Other",
+            onboardingData.skills.length
+        );
+
+    }
+
+
+
+    /* =========================================================
+       CREATE SKILL
+    ========================================================== */
+
+    function createSkill(
+        skill,
+        index
+    ) {
+
+        const wrapper =
+            document.createElement("div");
+
+        wrapper.className =
+            "skill";
+
+
+        const input =
+            document.createElement("input");
+
+        input.type =
+            "checkbox";
+
+        input.name =
+            "skills";
+
+        input.value =
+            skill;
+
+        input.id =
+            "skill_" + index;
+
+
+        const label =
+            document.createElement("label");
+
+        label.htmlFor =
+            input.id;
+
+        label.textContent =
+            skill;
+
+
+        wrapper.appendChild(input);
+
+        wrapper.appendChild(label);
+
+
+        skillsGrid.appendChild(wrapper);
+
+
+        input.addEventListener(
+            "change",
+            function() {
+
+                if (
+                    skill === "Other"
+                ) {
+
+                    if (input.checked) {
+
+                        otherSkill.style.display =
+                            "block";
+
+                        otherSkill.required =
+                            true;
+
+                        otherSkill.focus();
+
+                    } else {
+
+                        otherSkill.style.display =
+                            "none";
+
+                        otherSkill.required =
+                            false;
+
+                        otherSkill.value =
+                            "";
+
+                    }
+
+                }
+
+            }
+        );
+
+    }
+
+
+
+    /* =========================================================
+       VALIDATE CURRENT STEP
+    ========================================================== */
+
+    function validateStep() {
+
+        const activeStep =
+            document.querySelector(
+                `.step[data-step="${currentStep}"]`
+            );
+
+
+        if (!activeStep) {
+            return true;
+        }
+
+
+        /*
+         Handle radio groups separately.
+        */
+
+        const requiredRadios =
+            activeStep.querySelectorAll(
+                'input[type="radio"][required]'
+            );
+
+
+        const checkedGroups =
+            new Set();
+
+
+        for (
+            let i = 0;
+            i < requiredRadios.length;
+            i++
+        ) {
+
+            const radio =
+                requiredRadios[i];
+
+
+            if (
+                checkedGroups.has(
+                    radio.name
+                )
+            ) {
+                continue;
+            }
+
+
+            const group =
+                activeStep.querySelectorAll(
+                    `input[name="${radio.name}"]`
+                );
+
+
+            let checked =
+                false;
+
+
+            group.forEach(
+                function(item) {
+
+                    if (item.checked) {
+                        checked = true;
+                    }
+
+                }
+            );
+
+
+            if (!checked) {
+
+                alert(
+                    "Please select an option before continuing."
+                );
+
+                return false;
+
+            }
+
+
+            checkedGroups.add(
+                radio.name
+            );
+
+        }
+
+
+        /*
+         Select + text inputs.
+        */
+
+        const requiredFields =
+            activeStep.querySelectorAll(
+                "select[required], input[type='text'][required]"
+            );
+
+
+        for (
+            let i = 0;
+            i < requiredFields.length;
+            i++
+        ) {
+
+            const field =
+                requiredFields[i];
+
+
+            if (
+                !field.value.trim()
+            ) {
+
+                alert(
+                    "Please complete this field before continuing."
+                );
+
+
+                field.focus();
+
+
+                return false;
+
+            }
+
+        }
+
+
+        /*
+         Specialization manual entry.
+        */
+
+        if (
+            currentStep === 1 &&
+            specializationSelect.value === "Other"
+        ) {
+
+            if (
+                !otherSpecialization.value.trim()
+            ) {
+
+                alert(
+                    "Please enter your specialization."
+                );
+
+                otherSpecialization.focus();
+
+                return false;
+
+            }
+
+        }
+
+
+        /*
+         Career manual entry.
+        */
+
+        if (
+            currentStep === 2 &&
+            document.querySelector(
+                'input[name="career_goal"]:checked'
+            )?.value === "Other"
+        ) {
+
+            if (
+                !otherCareer.value.trim()
+            ) {
+
+                alert(
+                    "Please enter your career goal."
+                );
+
+                otherCareer.focus();
+
+                return false;
+
+            }
+
+        }
+
+
+        /*
+         Other skill.
+        */
+
+        if (
+            currentStep === 3
+        ) {
+
+            const otherSkillCheckbox =
+                document.querySelector(
+                    'input[name="skills"][value="Other"]'
+                );
+
+
+            if (
+                otherSkillCheckbox &&
+                otherSkillCheckbox.checked &&
+                !otherSkill.value.trim()
+            ) {
+
+                alert(
+                    "Please enter your other skill."
+                );
+
+                otherSkill.focus();
+
+                return false;
+
+            }
+
+        }
+
+
+        return true;
+
+    }
+
+
+
+    /* =========================================================
+       SHOW STEP
+    ========================================================== */
+
+    function showStep(number) {
+
+        currentStep =
+            number;
+
+
+        steps.forEach(
+            function(step) {
+
+                step.classList.remove(
+                    "active"
+                );
+
+            }
+        );
+
+
+        const activeStep =
+            document.querySelector(
+                `.step[data-step="${number}"]`
+            );
+
+
+        if (activeStep) {
+
+            activeStep.classList.add(
+                "active"
+            );
+
+        }
+
+
+        stepCounter.textContent =
+            `Step ${number} of ${totalSteps}`;
+
+
+        progressBar.style.width =
+            `${(number / totalSteps) * 100}%`;
+
+
+        if (number === 1) {
+
+            backButton.style.visibility =
+                "hidden";
+
+        } else {
+
+            backButton.style.visibility =
+                "visible";
+
+        }
+
+
+        if (
+            number === totalSteps
+        ) {
+
+            nextButton.style.display =
+                "none";
+
+            submitButton.style.display =
+                "flex";
+
+        } else {
+
+            nextButton.style.display =
+                "flex";
+
+            submitButton.style.display =
+                "none";
+
+        }
+
+    }
+
+
+
+    /* =========================================================
+       NEXT
+    ========================================================== */
+
+    function nextStep() {
+
+        if (!validateStep()) {
+            return;
+        }
+
+
+        /*
+         Before opening Step 2,
+         make careers based on specialization.
+        */
+
+        if (currentStep === 1) {
+
+            loadCareers();
+
+        }
+
+
+        if (
+            currentStep < totalSteps
+        ) {
+
+            showStep(
+                currentStep + 1
+            );
+
+        }
+
+    }
+
+
+
+    /* =========================================================
+       BACK
+    ========================================================== */
+
+    function previousStep() {
+
+        if (
+            currentStep > 1
+        ) {
+
+            showStep(
+                currentStep - 1
+            );
+
+        }
+
+    }
+
+
+
+    /* =========================================================
+       FORM SUBMIT
+    ========================================================== */
+
+    form.addEventListener(
+        "submit",
+        function(event) {
+
+            if (!validateStep()) {
+
+                event.preventDefault();
+
+                return;
+
+            }
+
+
+            /*
+             Convert "Other" values into
+             clean values before Django receives POST.
+            */
+
+            if (
+                specializationSelect.value ===
+                "Other"
+            ) {
+
+                specializationSelect.value =
+                    otherSpecialization.value.trim();
+
+            }
+
+
+            const selectedCareer =
+                document.querySelector(
+                    'input[name="career_goal"]:checked'
+                );
+
+
+            if (
+                selectedCareer &&
+                selectedCareer.value === "Other"
+            ) {
+
+                selectedCareer.value =
+                    otherCareer.value.trim();
+
+            }
+
+
+            const otherSkillCheckbox =
+                document.querySelector(
+                    'input[name="skills"][value="Other"]'
+                );
+
+
+            if (
+                otherSkillCheckbox &&
+                otherSkillCheckbox.checked
+            ) {
+
+                otherSkillCheckbox.value =
+                    otherSkill.value.trim();
+
+            }
+
+
+            submitButton.disabled =
+                true;
+
+
+            submitButton.innerHTML =
+                "Building your plan...";
+
+
+            /*
+             DO NOT preventDefault().
+             Django receives the POST.
+            */
+
+        }
+    );
+
+
+
+    /* =========================================================
+       INITIAL LOAD
+    ========================================================== */
+
+    loadEducationOptions();
+
+    loadSkills();
+
+    showStep(1);
+
+</script>
+#
+<style>
+    .onboarding-messages {
+        margin-bottom: 22px;
+    }
+
+    .onboarding-message {
+        padding: 13px 16px;
+        border: 1px solid #fed7aa;
+        border-radius: 14px;
+        background: #fff7ed;
+        color: #9a3412;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    /* Keep the selected study-time card highlighted */
+    .time-option input[type="radio"]:checked + .time-card {
+        border-color: #818cf8 !important;
+        background: #f5f5ff !important;
+        color: #4f46e5 !important;
+        box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.12) !important;
+        font-weight: 800;
+    }
+</style>
+
+
+
+</body>
+</html>

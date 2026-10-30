@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Missions | TechPilot</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f7fd;color:#20243a}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:174px;background:white;border-right:1px solid #e2e7f2;padding:24px 17px}
+.brand{font-size:22px;font-weight:800;color:#6554f0;margin-bottom:35px}
+.nav a{display:block;padding:13px 12px;margin:5px 0;border-radius:12px;color:#52617e;text-decoration:none;font-weight:600}
+.nav a.active{background:linear-gradient(110deg,#6554f0,#8437ed);color:white}
+main{margin-left:174px;padding:32px;max-width:1500px}
+.topline{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+h1{margin:8px 0;font-size:30px}
+.muted{color:#778098;line-height:1.6}
+.stats{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0}
+.stat{background:white;border:1px solid #e2e7f2;border-radius:14px;padding:17px 22px;min-width:145px}
+.stat strong{display:block;font-size:22px;margin-bottom:5px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}
+.card{background:white;border:1px solid #e1e6f1;border-radius:17px;padding:22px;display:flex;flex-direction:column;gap:12px}
+.card h2{font-size:19px;margin:0}
+.tag{display:inline-block;background:#f0edff;color:#6554f0;border-radius:20px;padding:6px 10px;font-size:12px;font-weight:700}
+.meta{display:flex;gap:14px;flex-wrap:wrap;color:#727b92;font-size:13px}
+.description{color:#68728a;line-height:1.6;margin:0}
+.actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto}
+.btn{display:inline-block;background:#6554f0;color:white;text-decoration:none;padding:11px 16px;border-radius:10px;font-weight:700;font-size:14px}
+.btn.done{background:#16834c}
+.status{font-size:13px;font-weight:700;color:#16834c}
+.empty{background:white;border:1px solid #e2e7f2;border-radius:16px;padding:25px}
+@media(max-width:850px){.sidebar{position:static;width:auto;padding:12px}.brand{margin-bottom:8px}.nav{display:flex;flex-wrap:wrap}.nav a{padding:9px}main{margin:0;padding:20px}.grid{grid-template-columns:1fr}}
+
+
+        .sidebar, main, .card, .grid > *, .topline > * { min-width: 0; }
+        h1, h2, .muted, .description, .tag { overflow-wrap: anywhere; }
+        .btn { min-height: 44px; display:inline-flex; align-items:center; justify-content:center; }
+        @media(max-width:850px) {
+            .sidebar { position:relative; top:auto; bottom:auto; width:100%; padding:12px 16px; }
+            .nav { gap:4px; }
+            .nav a { min-height:42px; }
+            main { width:100%; padding:20px 16px calc(28px + env(safe-area-inset-bottom, 0px)); }
+            .stats { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); }
+            .stat { min-width:0; padding:14px; }
+            .actions { align-items:flex-start; flex-wrap:wrap; }
+        }
+        @media(max-width:380px) {
+            main { padding:16px 12px calc(24px + env(safe-area-inset-bottom, 0px)); }
+            .card { padding:17px; }
+            .stats { gap:8px; }
+            .stat strong { font-size:19px; }
+            .actions .btn { width:100%; }
+        }
+
+    </style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="brand">✦ TechPilot</div>
+  <nav class="nav">
+    <a href="/dashboard/">🏠 Home Dashboard</a>
+    <a href="/roadmap/">🧭 My Journey</a>
+    <a href="{% url 'missions' %}" class="active">⚡ Daily Missions</a>
+    <a href="/practice/">🧠 Skill Labs</a>
+    <a href="/progress/">📊 Performance</a>
+    <a href="/jobs/">💼 Opportunities</a>
+  </nav>
+</aside>
+
+<main>
+  <div class="topline">
+    <div>
+      <p class="muted">Your personalised learning plan</p>
+      <h1>⚡ Daily Missions</h1>
+      <p class="muted">Learn, practise and track your progress one mission at a time.</p>
+    </div>
+    <span class="tag">{{ career_goal|default:"Your Career Roadmap" }}</span>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><strong>{{ mission_count|default:0 }}</strong><span class="muted">Total missions</span></div>
+    <div class="stat"><strong>{{ completed_count|default:0 }}</strong><span class="muted">Completed</span></div>
+    <div class="stat"><strong>{{ total_xp|default:0 }}</strong><span class="muted">XP earned</span></div>
+    <div class="stat"><strong>{{ current_day|default:1 }}/20</strong><span class="muted">Current day</span></div>
+    <div class="stat"><strong>{{ mission_progress|default:0 }}%</strong><span class="muted">Career plan progress</span></div>
+  </div>
+
+  {% if guidance %}
+    <section class="card" style="margin:18px 0;padding:18px;border:1px solid #e5e7eb;border-radius:14px;background:#fff;">
+      <strong>Recommended next action</strong>
+      <p class="muted">{{ guidance.suggested_action }} Focus next on {{ guidance.recommended_next_topic }}.</p>
+      {% if guidance.recommended_project %}<p>Project: {{ guidance.recommended_project.title }}</p>{% endif %}
+      {% if guidance.recommended_interview %}<p>Interview practice: {{ guidance.recommended_interview.question }}</p>{% endif %}
+    </section>
+  {% endif %}
+
+  {% if missions %}
+    <div class="grid">
+      {% for mission in missions %}
+        <article class="card">
+          <div>
+            <span class="tag">DAY {{ mission.day_number }} · {{ mission.category|default:"Learning" }}</span>
+          </div>
+          <h2>{{ mission.title }}</h2>
+          <p class="description">{{ mission.description }}</p>
+          <div class="meta">
+            <span>⏱ {{ mission.duration }} min</span>
+            <span>📈 {{ mission.difficulty|default:"Beginner" }}</span>
+            <span>⭐ {{ mission.xp }} XP</span>
+          </div>
+          <div class="actions">
+            {% if mission.completed %}
+              <span class="status">✓ Completed</span>
+            {% else %}
+              <span class="muted">{% if mission.is_today %}Today's mission{% else %}Day {{ mission.day_number }}{% endif %}</span>
+            {% endif %}
+            <a class="btn {% if mission.completed %}done{% endif %}"
+               href="{% url 'mission_detail' %}?mission={{ mission.title|urlencode }}&amp;record_id={{ mission.record_id }}">
+              {% if mission.completed %}Review Mission{% else %}Start Mission →{% endif %}
+            </a>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <section class="empty">
+      <h2>No missions found</h2>
+      <p class="muted">Your mission plan has no entries yet. Check your onboarding and career roadmap settings.</p>
+    </section>
+  {% endif %}
+</main>
+</body>
+</html>

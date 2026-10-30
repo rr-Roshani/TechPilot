@@ -1,0 +1,38 @@
+{% extends "admin/main.html" %}
+
+{% block content %}
+<section class="panel">
+    <a class="back-link" href="{% url 'admin_practice_labs' %}">← Back to Skill Labs</a>
+    <h1 style="margin-top:18px">Edit Skill Lab</h1>
+    <p class="secondary">Review the student instructions and expected results before publishing.</p>
+    {% if messages %}{% for message in messages %}<div class="message {{ message.tags }}">{{ message }}</div>{% endfor %}{% endif %}
+    <div class="panel" style="margin:18px 0;background:#fafaff">
+        <span class="pill">{{ lab.get_status_display }} · {{ lab.get_content_type_display }}</span>
+        <h2 style="margin-top:12px">{{ lab.title }}</h2>
+        <p><strong>{{ lab.roadmap }} · {{ lab.get_difficulty_display }} · {{ lab.skill }}</strong></p>
+        <p><strong>Learning objective:</strong> {{ lab.description }}</p>
+        <p><strong>Student instructions:</strong> {{ lab.task }}</p>
+        {% if lab.explanation %}<p><strong>Hint:</strong> {{ lab.explanation }}</p>{% endif %}
+        {% if lab.expected_answer %}<p><strong>Expected outcome:</strong> {{ lab.expected_answer }}</p>{% endif %}
+    </div>
+    <form method="post" class="question-form" style="margin-top:18px">
+        {% csrf_token %}
+        <label class="field-label">Title<input name="title" value="{{ lab.title }}" required maxlength="200"></label>
+        <div class="two-col">
+            <label class="field-label">Career<select name="roadmap" required>{% for value,label in roadmap_choices %}<option value="{{ value }}" {% if value == lab.roadmap %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
+            <label class="field-label">Difficulty<select name="difficulty" required>{% for value,label in difficulty_choices %}<option value="{{ value }}" {% if value == lab.difficulty %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
+        </div>
+        <label class="field-label">Content type<select name="content_type">{% for value,label in content_type_choices %}<option value="{{ value }}" {% if value == lab.content_type %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
+        <label class="field-label">Topics / skills<input name="skill" value="{{ lab.skill }}" required maxlength="100"></label>
+        <label class="field-label">Learning objective<textarea name="description" required>{{ lab.description }}</textarea></label>
+        <label class="field-label">Instructions<textarea name="task" required>{{ lab.task }}</textarea></label>
+        <label class="field-label">Expected result / solution<textarea name="expected_answer">{{ lab.expected_answer }}</textarea></label>
+        <label class="field-label">Hints and explanation<textarea name="explanation">{{ lab.explanation }}</textarea></label>
+        <div class="two-col">
+            <label class="field-label">XP<input type="number" name="xp" min="0" value="{{ lab.xp }}" required></label>
+            <label class="field-label">Publication status<select name="status" required>{% for value,label in content_statuses %}<option value="{{ value }}" {% if value == lab.status %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
+        </div>
+        <button type="submit">Save changes</button>
+    </form>
+</section>
+{% endblock %}

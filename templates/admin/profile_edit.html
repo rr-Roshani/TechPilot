@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Edit admin profile | TechPilot</title>
+<style>
+body{margin:0;background:#f7f8fc;color:#1f2937;font:14px/1.5 Arial,sans-serif}.page{max-width:520px;margin:70px auto;padding:28px;border:1px solid #e5e7eb;border-radius:16px;background:#fff}h1{margin:0 0 8px;font-size:26px}p{color:#6b7280}label{display:block;margin:15px 0 6px;font-weight:700;font-size:13px}input{width:100%;box-sizing:border-box;padding:11px;border:1px solid #dfe1e8;border-radius:9px;font:inherit}button,a{display:inline-block;margin-top:20px;padding:10px 14px;border:0;border-radius:9px;text-decoration:none;font-weight:700}button{background:#635bdb;color:#fff}a{margin-left:8px;color:#635bdb;background:#f0efff}.error{padding:10px;border-radius:8px;background:#fff0ef;color:#b33d36}
+</style></head>
+<body><main class="page"><h1>Edit admin profile</h1><p>Update the details shown in your admin workspace.</p>{% if messages %}{% for message in messages %}<div class="error">{{ message }}</div>{% endfor %}{% endif %}<form method="post">{% csrf_token %}<label for="first_name">First name</label><input id="first_name" name="first_name" value="{{ admin_profile.first_name }}"><label for="last_name">Last name</label><input id="last_name" name="last_name" value="{{ admin_profile.last_name }}"><label for="email">Email</label><input id="email" type="email" name="email" value="{{ admin_profile.email }}" required><button type="submit">Save profile</button><a href="{% url 'admin_main' %}">Cancel</a></form></main></body>
+</html>

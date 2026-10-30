@@ -1,0 +1,2269 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Workspace | TechPilot</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+   <style>
+
+        :root {
+
+            --ink: #1f2937;
+
+            --muted: #6b7280;
+
+            --line: #e5e7eb;
+
+            --canvas: #f7f8fc;
+
+            --surface: #fff;
+
+            --purple: #635bdb;
+
+            --purple-soft: #efefff;
+
+            --green: #168a5b;
+
+            --orange: #b96b13;
+
+        }
+
+
+
+        * {
+
+            box-sizing: border-box;
+
+        }
+
+
+
+        body {
+
+            margin: 0;
+
+            background: var(--canvas);
+
+            color: var(--ink);
+
+            font: 14px/1.5 "DM Sans", sans-serif;
+
+        }
+
+
+
+        a {
+
+            color: inherit;
+
+            text-decoration: none;
+
+        }
+
+
+
+        .layout {
+
+            display: flex;
+
+            min-height: 100vh;
+
+        }
+
+
+
+        .sidebar {
+
+            width: 250px;
+
+            flex: 0 0 250px;
+
+            padding: 28px 18px;
+
+            background: #20213a;
+
+            color: #d9daf0;
+
+        }
+
+
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            padding: 0 10px 36px;
+
+        }
+
+
+
+        .brand-mark {
+
+            display: grid;
+
+            width: 38px;
+
+            height: 38px;
+
+            place-items: center;
+
+            border-radius: 11px;
+
+            background: #8278f1;
+
+            color: #fff;
+
+            font: 700 20px "Space Grotesk";
+
+        }
+
+
+
+        .brand strong {
+
+            display: block;
+
+            color: #fff;
+
+            font: 700 18px "Space Grotesk";
+
+        }
+
+
+
+        .brand span {
+
+            color: #a8a9c8;
+
+            font-size: 11px;
+
+        }
+
+
+
+        .side-label {
+
+            margin: 0 12px 10px;
+
+            color: #8d8eae;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            letter-spacing: .12em;
+
+            text-transform: uppercase;
+
+        }
+
+
+
+        .side-link {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+            margin: 4px 0;
+
+            padding: 12px;
+
+            border-radius: 10px;
+
+            color: #bfc0db;
+
+            font-weight: 600;
+
+        }
+
+
+
+        .side-link:hover,
+
+        .side-link.active {
+
+            background: rgba(130,120,241,.2);
+
+            color: #fff;
+
+        }
+
+
+
+        .sidebar-footer {
+
+            margin-top: auto;
+
+            padding: 22px 10px 0;
+
+            color: #9698b9;
+
+            font-size: 12px;
+
+        }
+
+
+
+        .content {
+
+            width: 100%;
+
+            padding: 38px 46px 60px;
+
+        }
+
+
+
+        .topbar {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-start;
+
+            gap: 20px;
+
+            margin-bottom: 28px;
+
+        }
+
+
+
+        h1,
+
+        h2,
+
+        h3 {
+
+            margin: 0;
+
+            font-family: "Space Grotesk", sans-serif;
+
+        }
+
+
+
+        h1 {
+
+            font-size: 30px;
+
+            letter-spacing: -.04em;
+
+        }
+
+
+
+        .subtitle {
+
+            margin: 7px 0 0;
+
+            color: var(--muted);
+
+        }
+
+
+
+        .admin-user {
+
+            padding: 9px 13px;
+
+            border: 1px solid var(--line);
+
+            border-radius: 10px;
+
+            background: var(--surface);
+
+            color: var(--muted);
+
+        }
+
+
+
+        .admin-user a {
+
+            margin-left: 8px;
+
+            color: var(--purple);
+
+            font-weight: 700;
+
+        }
+
+
+
+        .stats {
+
+            display: grid;
+
+            grid-template-columns: repeat(4, 1fr);
+
+            gap: 15px;
+
+            margin-bottom: 25px;
+
+        }
+
+
+
+        .stat,
+
+        .panel {
+
+            border: 1px solid var(--line);
+
+            border-radius: 15px;
+
+            background: var(--surface);
+
+            box-shadow: 0 5px 18px rgba(25, 25, 60, .035);
+
+        }
+
+
+
+        .stat {
+
+            padding: 18px;
+
+        }
+
+
+
+        .stat-label {
+
+            color: var(--muted);
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+        }
+
+
+
+        .stat-value {
+
+            display: block;
+
+            margin-top: 7px;
+
+            font: 700 27px "Space Grotesk";
+
+        }
+
+
+
+        .workspace {
+
+            display: grid;
+
+            grid-template-columns: minmax(0, 1.6fr) minmax(330px, .9fr);
+
+            gap: 20px;
+
+            align-items: start;
+
+        }
+
+
+
+        .panel {
+
+            padding: 21px;
+
+        }
+
+
+
+        .panel-heading {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 12px;
+
+            margin-bottom: 18px;
+
+        }
+
+
+
+        .panel-heading h2 {
+
+            font-size: 19px;
+
+        }
+
+
+
+        .panel-heading p {
+
+            margin: 4px 0 0;
+
+            color: var(--muted);
+
+            font-size: 12px;
+
+        }
+
+
+
+        .search {
+
+            display: flex;
+
+            gap: 8px;
+
+            margin-bottom: 15px;
+
+        }
+
+
+
+        input,
+
+        select,
+
+        textarea {
+
+            width: 100%;
+
+            border: 1px solid #dfe1e8;
+
+            border-radius: 9px;
+
+            padding: 10px 11px;
+
+            background: #fff;
+
+            color: var(--ink);
+
+            font: inherit;
+
+        }
+
+
+
+        textarea {
+
+            min-height: 80px;
+
+            resize: vertical;
+
+        }
+
+
+
+        input:focus,
+
+        select:focus,
+
+        textarea:focus {
+
+            outline: 3px solid rgba(99,91,219,.12);
+
+            border-color: var(--purple);
+
+        }
+
+
+
+        button {
+
+            border: 0;
+
+            border-radius: 9px;
+
+            padding: 10px 15px;
+
+            background: var(--purple);
+
+            color: #fff;
+
+            cursor: pointer;
+
+            font: 700 13px "DM Sans";
+
+        }
+
+
+
+        button:hover {
+
+            background: #5149c5;
+
+        }
+
+
+
+        .table-wrap {
+
+            overflow-x: auto;
+
+        }
+
+
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 680px;
+
+        }
+
+
+
+        th {
+
+            padding: 10px 9px;
+
+            border-bottom: 1px solid var(--line);
+
+            color: #8a8d99;
+
+            font-size: 10px;
+
+            letter-spacing: .06em;
+
+            text-align: left;
+
+            text-transform: uppercase;
+
+        }
+
+
+
+        td {
+
+            padding: 13px 9px;
+
+            border-bottom: 1px solid #f0f1f4;
+
+            vertical-align: middle;
+
+        }
+
+
+
+        tbody tr:last-child td {
+
+            border-bottom: 0;
+
+        }
+
+
+
+        .person {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+        }
+
+
+
+        .avatar {
+
+            display: grid;
+
+            width: 31px;
+
+            height: 31px;
+
+            place-items: center;
+
+            border-radius: 9px;
+
+            background: var(--purple-soft);
+
+            color: var(--purple);
+
+            font-weight: 700;
+
+        }
+
+
+
+        .person strong {
+
+            display: block;
+
+            font-size: 13px;
+
+        }
+
+
+
+        .person span,
+
+        .secondary {
+
+            color: var(--muted);
+
+            font-size: 11px;
+
+        }
+
+
+
+        .pill {
+
+            display: inline-block;
+
+            padding: 4px 8px;
+
+            border-radius: 999px;
+
+            background: #f3f4f6;
+
+            color: var(--muted);
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+        }
+
+
+
+        .pill.done {
+
+            background: #e8f7ef;
+
+            color: var(--green);
+
+        }
+
+
+
+        .pill.pending {
+
+            background: #fff5e6;
+
+            color: var(--orange);
+
+        }
+
+
+
+        .progress-line {
+
+            width: 90px;
+
+            height: 6px;
+
+            overflow: hidden;
+
+            border-radius: 99px;
+
+            background: #ececf2;
+
+        }
+
+
+
+        .progress-line span {
+
+            display: block;
+
+            height: 100%;
+
+            border-radius: inherit;
+
+            background: linear-gradient(90deg, #635bdb, #9b75ed);
+
+        }
+
+
+
+        .question-form {
+
+            display: grid;
+
+            gap: 11px;
+
+        }
+
+
+
+        .field-label {
+
+            display: block;
+
+            margin-bottom: 5px;
+
+            color: #555967;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+        }
+
+
+
+        .two-col {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 10px;
+
+        }
+
+
+
+        .messages {
+
+            display: grid;
+
+            gap: 8px;
+
+            margin-bottom: 18px;
+
+        }
+
+
+
+        .message {
+
+            padding: 11px 13px;
+
+            border-radius: 9px;
+
+            background: #e8f7ef;
+
+            color: var(--green);
+
+            font-weight: 600;
+
+        }
+
+
+
+        .message.error {
+
+            background: #fff0ef;
+
+            color: #b33d36;
+
+        }
+
+
+
+        .empty {
+
+            padding: 28px 10px;
+
+            color: var(--muted);
+
+            text-align: center;
+
+        }
+
+
+
+        .onboarding-questions {
+
+            height: 430px;
+
+            overflow-y: auto;
+
+            padding-right: 5px;
+
+        }
+
+
+
+        .question-list {
+
+            display: grid;
+
+            gap: 2px;
+
+        }
+
+
+
+        .question-row {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            padding: 12px 0;
+
+            border-bottom: 1px solid #f0f1f4;
+
+        }
+
+
+
+        .question-row:last-child {
+
+            border-bottom: 0;
+
+        }
+
+
+
+        .question-row strong {
+
+            display: block;
+
+            font-size: 13px;
+
+        }
+
+
+
+        .question-row span:not(.pill) {
+
+            display: block;
+
+            margin-top: 3px;
+
+            color: var(--muted);
+
+            font-size: 11px;
+
+        }
+
+
+
+        .admin-profile-card {
+
+            grid-column: 1 / -1;
+
+        }
+
+
+
+        .admin-profile-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(4, 1fr);
+
+            gap: 14px;
+
+        }
+
+
+
+        .admin-profile-grid div {
+
+            padding: 13px;
+
+            border-radius: 10px;
+
+            background: #fafaff;
+
+        }
+
+
+
+        .admin-profile-grid span {
+
+            display: block;
+
+            color: var(--muted);
+
+            font-size: 11px;
+
+        }
+
+
+
+        .admin-profile-grid strong {
+
+            display: block;
+
+            margin-top: 4px;
+
+            font-size: 13px;
+
+        }
+
+
+
+        @media (max-width: 1050px) {
+
+            .content {
+
+                padding: 30px 24px;
+
+            }
+
+
+
+            .workspace {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+
+
+        @media (max-width: 760px) {
+
+            .sidebar {
+
+                width: 70px;
+
+                flex-basis: 70px;
+
+                padding: 20px 10px;
+
+            }
+
+
+
+            .brand {
+
+                padding: 0 6px 30px;
+
+            }
+
+
+
+            .brand strong,
+
+            .brand span,
+
+            .side-label,
+
+            .side-link span,
+
+            .sidebar-footer {
+
+                display: none;
+
+            }
+
+
+
+            .side-link {
+
+                justify-content: center;
+
+            }
+
+
+
+            .content {
+
+                padding: 24px 15px 40px;
+
+            }
+
+
+
+            .stats {
+
+                grid-template-columns: 1fr 1fr;
+
+            }
+
+
+
+            .topbar {
+
+                flex-direction: column;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+
+<body>
+
+
+
+<div class="layout">
+
+
+
+
+
+<aside class="sidebar">
+
+    <div class="brand">
+
+        <div class="brand-mark">T</div>
+
+        <div>
+
+            <strong>TechPilot</strong>
+
+            <span>Admin workspace</span>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="side-label">Manage</div>
+
+
+
+    <!-- Overview -->
+
+    <a
+
+        class="side-link {% if request.resolver_match.url_name == 'admin_main' %}active{% endif %}"
+
+        href="{% url 'admin_main' %}"
+
+        {% if request.resolver_match.url_name == 'admin_main' %}aria-current="page"{% endif %}
+
+    >
+
+        <span aria-hidden="true">▦</span>
+
+        <span>Overview</span>
+
+    </a>
+
+
+
+    <!-- Users -->
+
+    <a
+
+        class="side-link {% if request.resolver_match.url_name == 'admin_users' or request.resolver_match.url_name == 'admin_user_detail' %}active{% endif %}"
+
+        href="{% url 'admin_users' %}"
+
+        {% if request.resolver_match.url_name == 'admin_users' or request.resolver_match.url_name == 'admin_user_detail' %}aria-current="page"{% endif %}
+
+    >
+
+        <span aria-hidden="true">◉</span>
+
+        <span>Users</span>
+
+    </a>
+
+
+
+    <!-- Questions -->
+
+    <a
+
+        class="side-link {% if request.resolver_match.url_name == 'admin_questions' or request.resolver_match.url_name == 'admin_question_detail' %}active{% endif %}"
+
+        href="{% url 'admin_questions' %}"
+
+        {% if request.resolver_match.url_name == 'admin_questions' or request.resolver_match.url_name == 'admin_question_detail' %}aria-current="page"{% endif %}
+
+    >
+
+        <span aria-hidden="true">?</span>
+
+        <span>Questions</span>
+
+    </a>
+
+
+
+    <!-- Practice Labs -->
+
+    <a
+
+        class="side-link {% if request.resolver_match.url_name == 'admin_practice_labs' or request.resolver_match.url_name == 'admin_practice_lab_edit' or request.resolver_match.url_name == 'admin_practice_lab_delete' %}active{% endif %}"
+
+        href="{% url 'admin_practice_labs' %}"
+
+        {% if request.resolver_match.url_name == 'admin_practice_labs' or request.resolver_match.url_name == 'admin_practice_lab_edit' or request.resolver_match.url_name == 'admin_practice_lab_delete' %}aria-current="page"{% endif %}
+
+    >
+
+        <span aria-hidden="true">✦</span>
+
+        <span>Practice Labs</span>
+
+    </a>
+
+
+
+    <!-- Sidebar footer -->
+
+    <div class="sidebar-footer">
+
+        <div class="signed-in">
+
+            Signed in as<br>
+
+            <strong>{{ request.user.get_username }}</strong>
+
+        </div>
+
+
+
+        <a class="side-link logout-link" href="{% url 'logout' %}">
+
+            <span aria-hidden="true">↪</span>
+
+            <span>Logout</span>
+
+        </a>
+
+    </div>
+
+</aside>
+
+
+
+
+
+
+
+    <main class="content">
+
+
+
+        {% block content %}
+
+
+
+        <header class="topbar">
+
+
+
+            <div>
+
+                <h1>
+
+                    Admin overview
+
+                </h1>
+
+
+
+                <p class="subtitle">
+
+                    Monitor learners and keep the assessment library useful.
+
+                </p>
+
+            </div>
+
+
+
+
+
+            <div class="admin-user">
+
+
+
+                {{ request.user.get_full_name|default:request.user.username }}
+
+
+
+                <a href="{% url 'admin_profile_edit' %}">
+
+                    Edit profile
+
+                </a>
+
+
+
+            </div>
+
+
+
+        </header>
+
+
+
+
+
+        {% if messages %}
+
+
+
+            <div class="messages">
+
+
+
+                {% for message in messages %}
+
+
+
+                    <div class="message {{ message.tags }}">
+
+                        {{ message }}
+
+                    </div>
+
+
+
+                {% endfor %}
+
+
+
+            </div>
+
+
+
+        {% endif %}
+
+
+
+
+
+        <!-- STATS -->
+
+
+
+        <section class="stats">
+
+
+
+            <div class="stat">
+
+
+
+                <span class="stat-label">
+
+                    Registered users
+
+                </span>
+
+
+
+                <strong class="stat-value">
+
+                    {{ user_count }}
+
+                </strong>
+
+
+
+            </div>
+
+
+
+
+
+            <div class="stat">
+
+
+
+                <span class="stat-label">
+
+                    Completed onboarding
+
+                </span>
+
+
+
+                <strong class="stat-value">
+
+                    {{ onboarded_count }}
+
+                </strong>
+
+
+
+            </div>
+
+
+
+
+
+            <div class="stat">
+
+
+
+                <span class="stat-label">
+
+                    Assessment attempts
+
+                </span>
+
+
+
+                <strong class="stat-value">
+
+                    {{ assessment_count }}
+
+                </strong>
+
+
+
+            </div>
+
+
+
+
+
+            <div class="stat">
+
+
+
+                <span class="stat-label">
+
+                    Question bank
+
+                </span>
+
+
+
+                <strong class="stat-value">
+
+                    {{ question_count }}
+
+                </strong>
+
+
+
+            </div>
+
+
+
+        </section>
+
+
+
+
+
+        <div class="workspace">
+
+
+
+
+
+            <!-- REGISTERED USERS -->
+
+
+
+            <section
+
+                class="panel"
+
+                id="users"
+
+            >
+
+
+
+                <div class="panel-heading">
+
+
+
+                    <div>
+
+
+
+                        <h2>
+
+                            Registered users
+
+                        </h2>
+
+
+
+                        <p>
+
+                            Progress and learning profile at a glance.
+
+                        </p>
+
+
+
+                    </div>
+
+
+
+                </div>
+
+
+
+
+
+                <form
+
+                    class="search"
+
+                    method="get"
+
+                >
+
+
+
+                    <input
+
+                        name="q"
+
+                        value="{{ search_query }}"
+
+                        placeholder="Search name or email"
+
+                    >
+
+
+
+                    <button type="submit">
+
+                        Search
+
+                    </button>
+
+
+
+
+
+                    {% if search_query %}
+
+
+
+                        <a
+
+                            class="admin-user"
+
+                            href="{% url 'admin_main' %}"
+
+                        >
+
+                            Clear
+
+                        </a>
+
+
+
+                    {% endif %}
+
+
+
+                </form>
+
+
+
+
+
+                <div class="table-wrap">
+
+
+
+                    <table>
+
+
+
+                        <thead>
+
+
+
+                            <tr>
+
+                                <th>User</th>
+
+                                <th>Onboarding</th>
+
+                                <th>Goal</th>
+
+                                <th>Progress</th>
+
+                                <th>Assessment</th>
+
+                            </tr>
+
+
+
+                        </thead>
+
+
+
+
+
+                        <tbody>
+
+
+
+                        {% for row in user_rows %}
+
+
+
+                            <tr>
+
+
+
+                                <td>
+
+
+
+                                    <a
+
+                                        class="person"
+
+                                        href="{% url 'admin_user_detail' row.user.id %}"
+
+                                    >
+
+
+
+                                        <div class="avatar">
+
+                                            {{ row.user.first_name|first|default:row.user.username|first|upper }}
+
+                                        </div>
+
+
+
+
+
+                                        <div>
+
+
+
+                                            <strong>
+
+                                                {{ row.user.get_full_name|default:row.user.username }}
+
+                                            </strong>
+
+
+
+                                            <span>
+
+                                                {{ row.user.email|default:row.user.username }}
+
+                                            </span>
+
+
+
+                                        </div>
+
+
+
+                                    </a>
+
+
+
+                                </td>
+
+
+
+
+
+                                <td>
+
+
+
+                                    {% if row.profile and row.profile.onboarding_completed %}
+
+
+
+                                        <span class="pill done">
+
+                                            Complete
+
+                                        </span>
+
+
+
+                                    {% else %}
+
+
+
+                                        <span class="pill pending">
+
+                                            Pending
+
+                                        </span>
+
+
+
+                                    {% endif %}
+
+
+
+                                </td>
+
+
+
+
+
+                                <td class="secondary">
+
+
+
+                                    {% if row.profile %}
+
+
+
+                                        {{ row.profile.career_goal|default:"Not selected" }}
+
+
+
+                                    {% else %}
+
+
+
+                                        Not started
+
+
+
+                                    {% endif %}
+
+
+
+                                </td>
+
+
+
+
+
+                                <td>
+
+
+
+                                    {% if row.progress %}
+
+
+
+                                        <div class="progress-line">
+
+
+
+                                            <span
+
+                                                style="width: {{ row.progress.career_progress }}%;"
+
+                                            ></span>
+
+
+
+                                        </div>
+
+
+
+                                        <span class="secondary">
+
+                                            {{ row.progress.career_progress }}%
+
+                                        </span>
+
+
+
+                                    {% else %}
+
+
+
+                                        <span class="secondary">
+
+                                            —
+
+                                        </span>
+
+
+
+                                    {% endif %}
+
+
+
+                                </td>
+
+
+
+
+
+                                <td>
+
+
+
+                                    {% if row.latest_attempt %}
+
+
+
+                                        <strong>
+
+                                            {{ row.latest_attempt.score }}%
+
+                                        </strong>
+
+
+
+                                        <br>
+
+
+
+                                        <span class="secondary">
+
+                                            {{ row.assessment_count }}
+
+                                            attempt{{ row.assessment_count|pluralize }}
+
+                                        </span>
+
+
+
+                                    {% else %}
+
+
+
+                                        <span class="secondary">
+
+                                            Not attempted
+
+                                        </span>
+
+
+
+                                    {% endif %}
+
+
+
+                                </td>
+
+
+
+                            </tr>
+
+
+
+                        {% empty %}
+
+
+
+                            <tr>
+
+
+
+                                <td colspan="5">
+
+
+
+                                    <div class="empty">
+
+                                        No users match this search.
+
+                                    </div>
+
+
+
+                                </td>
+
+
+
+                            </tr>
+
+
+
+                        {% endfor %}
+
+
+
+                        </tbody>
+
+
+
+                    </table>
+
+
+
+                </div>
+
+
+
+            </section>
+
+
+
+
+
+            <!-- ONBOARDING QUESTIONS -->
+
+
+
+            <section
+
+                class="panel"
+
+                id="questions"
+
+            >
+
+
+
+                <div class="panel-heading">
+
+
+
+                    <div>
+
+
+
+                        <h2>
+
+                            Onboarding ques
+
+                        </h2>
+
+
+
+                        <p>
+
+                            Reference questions imported with the onboarding content.
+
+                        </p>
+
+
+
+                    </div>
+
+
+
+                    <span class="pill">
+
+                        {{ onboarding_questions|length }} shown
+
+                    </span>
+
+
+
+                </div>
+
+
+
+
+
+                <div class="question-list onboarding-questions">
+
+
+
+                    {% for question in onboarding_questions %}
+
+
+
+                        <div class="question-row">
+
+
+
+                            <div>
+
+
+
+                                <strong>
+
+                                    {{ question.question_text|truncatechars:90 }}
+
+                                </strong>
+
+
+
+                                <span>
+
+                                    {{ question.get_skill_display }}
+
+                                    ·
+
+                                    {{ question.get_difficulty_display }}
+
+                                </span>
+
+
+
+                            </div>
+
+
+
+
+
+                            <span class="pill">
+
+                                {{ question.correct_answer }}
+
+                            </span>
+
+
+
+                        </div>
+
+
+
+                    {% empty %}
+
+
+
+                        <div class="empty">
+
+                            No onboarding questions found.
+
+                        </div>
+
+
+
+                    {% endfor %}
+
+
+
+                </div>
+
+
+
+
+
+                <div
+
+                    class="panel-heading"
+
+                    style="margin-top:22px; margin-bottom:8px;"
+
+                >
+
+
+
+                    <div>
+
+
+
+                        <h2>
+
+                            Assessment activity
+
+                        </h2>
+
+
+
+                        <p>
+
+                            Open a student’s assessment result and analytics.
+
+                        </p>
+
+
+
+                    </div>
+
+
+
+                </div>
+
+
+
+
+
+                <div class="question-list">
+
+
+
+                    {% for attempt in assessment_activity %}
+
+
+
+                        <a
+
+                            class="question-row"
+
+                            href="{% url 'admin_user_detail' attempt.user.id %}"
+
+                        >
+
+
+
+                            <div>
+
+
+
+                                <strong>
+
+                                    {{ attempt.user.get_full_name|default:attempt.user.username }}
+
+                                </strong>
+
+
+
+                                <span>
+
+                                    {{ attempt.user.email }}
+
+                                    ·
+
+                                    {{ attempt.completed_at|date:"d M Y, H:i" }}
+
+                                </span>
+
+
+
+                            </div>
+
+
+
+
+
+                            <span class="pill">
+
+                                {{ attempt.score }}%
+
+                            </span>
+
+
+
+                        </a>
+
+
+
+                    {% empty %}
+
+
+
+                        <div class="empty">
+
+                            No assessment activity yet.
+
+                        </div>
+
+
+
+                    {% endfor %}
+
+
+
+                </div>
+
+
+
+            </section>
+
+
+
+
+
+            <!-- ADMIN PROFILE -->
+
+
+
+            <section
+
+                class="panel admin-profile-card"
+
+            >
+
+
+
+                <div class="panel-heading">
+
+
+
+                    <div>
+
+
+
+                        <h2>
+
+                            Admin profile
+
+                        </h2>
+
+
+
+                        <p>
+
+                            Your administrator account details.
+
+                        </p>
+
+
+
+                    </div>
+
+
+
+
+
+                    <a
+
+                        class="admin-user"
+
+                        href="{% url 'admin_profile_edit' %}"
+
+                    >
+
+                        Edit profile
+
+                    </a>
+
+
+
+                </div>
+
+
+
+
+
+                <div class="admin-profile-grid">
+
+
+
+                    <div>
+
+
+
+                        <span>
+
+                            Name
+
+                        </span>
+
+
+
+                        <strong>
+
+                            {{ admin_profile.get_full_name|default:"Not set" }}
+
+                        </strong>
+
+
+
+                    </div>
+
+
+
+
+
+                    <div>
+
+
+
+                        <span>
+
+                            Email
+
+                        </span>
+
+
+
+                        <strong>
+
+                            {{ admin_profile.email|default:"Not set" }}
+
+                        </strong>
+
+
+
+                    </div>
+
+
+
+
+
+                    <div>
+
+
+
+                        <span>
+
+                            Username
+
+                        </span>
+
+
+
+                        <strong>
+
+                            {{ admin_profile.username }}
+
+                        </strong>
+
+
+
+                    </div>
+
+
+
+
+
+                    <div>
+
+
+
+                        <span>
+
+                            Access
+
+                        </span>
+
+
+
+                        <strong>
+
+                            Staff administrator
+
+                        </strong>
+
+
+
+                    </div>
+
+
+
+                </div>
+
+
+
+            </section>
+
+
+
+        </div>
+
+
+
+        {% endblock %}
+
+
+
+    </main>
+
+
+
+</div>
+
+
+
+</body>
+
+</html>

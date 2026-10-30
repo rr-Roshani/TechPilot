@@ -1,0 +1,874 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Login | TechPilot</title>
+
+    <!-- Google Identity Services -->
+    {% comment %} <script src="https://accounts.google.com/gsi/client" async defer></script> {% endcomment %}
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f7f5ff,
+                    #ffffff,
+                    #f7f2ff
+                );
+
+            color: #171827;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+
+            overflow-x: hidden;
+        }
+
+
+        .wrapper {
+            width: 100%;
+            max-width: 430px;
+        }
+
+
+        .logo {
+            text-align: center;
+
+            font-size: 28px;
+
+            font-weight: 900;
+
+            margin-bottom: 25px;
+        }
+
+
+        .logo span {
+            background:
+                linear-gradient(
+                    90deg,
+                    #6c5ce7,
+                    #9b59ff
+                );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+
+            color: transparent;
+        }
+
+
+        .card {
+            background: #ffffff;
+
+            border: 1px solid #e8e7ef;
+
+            border-radius: 22px;
+
+            padding:
+                clamp(24px, 6vw, 38px);
+
+            box-shadow:
+                0 20px 55px
+                rgba(50, 40, 100, 0.09);
+        }
+
+
+        .header {
+            text-align: center;
+
+            margin-bottom: 25px;
+        }
+
+
+        .header h1 {
+            font-size:
+                clamp(24px, 6vw, 30px);
+
+            margin-bottom: 8px;
+        }
+
+
+        .header p {
+            color: #777887;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+        }
+
+
+        /* DJANGO MESSAGES */
+
+        .messages {
+            display: grid;
+
+            gap: 8px;
+
+            margin-bottom: 16px;
+        }
+
+
+        .message {
+            padding: 11px 13px;
+
+            border-radius: 9px;
+
+            background: #fff0ee;
+
+            color: #c53d30;
+
+            font-size: 13px;
+
+            line-height: 1.5;
+        }
+
+
+        .message.success {
+            background: #eaf8f0;
+
+            color: #208a4c;
+        }
+
+
+        /* GOOGLE LOGIN */
+
+        .google-section {
+            width: 100%;
+
+            margin-bottom: 22px;
+        }
+
+
+        .google-title {
+            text-align: center;
+
+            font-size: 12px;
+
+            color: #777887;
+
+            margin-bottom: 10px;
+        }
+
+
+        .google-button-wrapper {
+            width: 100%;
+
+            display: flex;
+
+            justify-content: center;
+        }
+
+
+        .google-button-wrapper > div {
+            width: 100% !important;
+        }
+
+
+        .google-button-wrapper iframe {
+            width: 100% !important;
+        }
+
+
+        .divider {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            margin: 20px 0 22px;
+
+            color: #999aaa;
+
+            font-size: 12px;
+        }
+
+
+        .divider::before,
+        .divider::after {
+            content: "";
+
+            flex: 1;
+
+            height: 1px;
+
+            background: #e8e7ef;
+        }
+
+
+        /* FORM */
+
+        .field {
+            margin-bottom: 17px;
+        }
+
+
+        .field label {
+            display: block;
+
+            font-size: 13px;
+
+            font-weight: 800;
+
+            margin-bottom: 7px;
+        }
+
+
+        .field input {
+            width: 100%;
+
+            height: 48px;
+
+            padding:
+                0 14px;
+
+            border:
+                1px solid #dedee8;
+
+            border-radius: 10px;
+
+            outline: none;
+
+            font-size: 14px;
+
+            color: #171827;
+
+            background: #ffffff;
+
+            transition: 0.2s;
+        }
+
+
+        .field input:focus {
+            border-color: #6c5ce7;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(108, 92, 231, 0.10);
+        }
+
+
+        .forgot {
+            text-align: right;
+
+            margin-top: -8px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .forgot a {
+            color: #6554d8;
+
+            text-decoration: none;
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+
+        .forgot a:hover {
+            text-decoration: underline;
+        }
+
+
+        .login-btn {
+            width: 100%;
+
+            height: 50px;
+
+            border: none;
+
+            border-radius: 11px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #6c5ce7,
+                    #9b59ff
+                );
+
+            color: #ffffff;
+
+            font-size: 14px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 10px 25px
+                rgba(108, 92, 231, 0.22);
+        }
+
+
+        .signup {
+            text-align: center;
+
+            margin-top: 22px;
+
+            color: #777887;
+
+            font-size: 13px;
+        }
+
+
+        .signup a {
+            color: #6554d8;
+
+            font-weight: 800;
+
+            text-decoration: none;
+        }
+
+
+        .signup a:hover {
+            text-decoration: underline;
+        }
+
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 48px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 28px;
+    height: 28px;
+
+    border: none;
+    background: transparent;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    cursor: pointer;
+
+    font-size: 16px;
+    opacity: 0.55;
+
+    transition: opacity 0.2s ease;
+}
+
+.password-toggle:hover {
+    opacity: 1;
+}
+
+.login-mode {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 22px;
+    padding: 5px;
+    border: 1px solid #e8e7ef;
+    border-radius: 12px;
+    background: #f8f7fc;
+}
+
+.login-mode label {
+    padding: 10px;
+    border-radius: 9px;
+    color: #777887;
+    font-size: 13px;
+    font-weight: 800;
+    text-align: center;
+    cursor: pointer;
+}
+
+.login-mode input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.login-mode input:checked + label {
+    background: #ffffff;
+    color: #6554d8;
+    box-shadow: 0 3px 10px rgba(50, 40, 100, .08);
+}
+
+.admin-key-field {
+    display: none;
+}
+
+.admin-key-field.visible {
+    display: block;
+}
+
+.admin-note {
+    margin: -8px 0 16px;
+    color: #777887;
+    font-size: 12px;
+    line-height: 1.5;
+}
+        /* MOBILE */
+
+        @media (max-width: 400px) {
+
+            body {
+                padding: 14px;
+            }
+
+
+            .card {
+                border-radius: 18px;
+
+                padding: 23px 18px;
+            }
+
+
+            .logo {
+                font-size: 24px;
+
+                margin-bottom: 18px;
+            }
+
+
+            .header {
+                margin-bottom: 21px;
+            }
+
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+
+            .header p {
+                font-size: 13px;
+            }
+
+
+            .field input {
+                height: 46px;
+            }
+
+
+            .login-btn {
+                height: 48px;
+            }
+
+        }
+
+
+        @media (max-width: 360px) {
+
+            body {
+                padding: 10px;
+            }
+
+
+            .card {
+                padding: 21px 15px;
+            }
+
+
+            .logo {
+                font-size: 22px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="wrapper">
+
+
+    <!-- LOGO -->
+
+    <div class="logo">
+
+        Tech<span>Pilot</span>
+
+    </div>
+
+
+    <!-- LOGIN CARD -->
+
+    <div class="card">
+
+
+        <div class="header">
+
+            <h1>
+                Welcome back 👋
+            </h1>
+
+            <p>
+                Sign in to continue your career journey.
+            </p>
+
+        </div>
+
+
+        <!-- DJANGO MESSAGES -->
+
+        {% if messages %}
+
+            <div class="messages">
+
+                {% for message in messages %}
+
+                    <div
+                        class="message
+                        {% if message.tags == 'success' %}
+                            success
+                        {% endif %}"
+                    >
+
+                        {{ message }}
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- GOOGLE SIGN IN -->
+
+        {% comment %} <div class="google-section">
+
+            <div class="google-title">
+                Continue with Google
+            </div>
+
+
+            <div
+                id="g_id_onload"
+                data-client_id="{{ google_client_id }}"
+                data-context="signin"
+                data-ux_mode="popup"
+                data-callback="handleGoogleLogin"
+                data-auto_prompt="false"
+            >
+            </div>
+
+
+            <div class="google-button-wrapper">
+
+                <div
+                    class="g_id_signin"
+                    data-type="standard"
+                    data-shape="rectangular"
+                    data-theme="outline"
+                    data-text="continue_with"
+                    data-size="large"
+                    data-width="390"
+                >
+                </div>
+
+            </div>
+
+        </div> {% endcomment %}
+
+
+        <!-- DIVIDER -->
+
+        {% comment %} <div class="divider">
+            OR
+        </div> {% endcomment %}
+
+
+        <div class="login-mode" aria-label="Choose account type">
+            <input type="radio" id="studentMode" name="account_mode" value="student" checked>
+            <label for="studentMode">Student login</label>
+            <input type="radio" id="adminMode" name="account_mode" value="admin">
+            <label for="adminMode">Admin / teacher</label>
+        </div>
+
+        <!-- NORMAL LOGIN -->
+
+        <form
+            method="POST"
+            action="{% url 'login' %}"
+            id="loginForm"
+        >
+
+            {% csrf_token %}
+
+            <input type="hidden" name="account_type" id="accountType" value="student">
+
+
+            <!-- EMAIL -->
+
+            <div class="field student-field">
+
+                <label for="email">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="you@example.com"
+                    autocomplete="email"
+                    required
+                >
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+<div class="field student-field">
+
+    <label for="password">
+        Password
+    </label>
+
+    <div class="password-wrapper">
+
+        <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+            required
+        >
+
+        <button
+            type="button"
+            class="password-toggle"
+            id="passwordToggle"
+            aria-label="Show password"
+        >
+            👁
+        </button>
+
+    </div>
+
+</div>
+
+            <div class="field admin-key-field" id="adminKeyField">
+                <label for="adminKey">Admin access key</label>
+                <input
+                    type="password"
+                    id="adminKey"
+                    name="admin_key"
+                    placeholder="Enter admin key"
+                    autocomplete="off"
+                >
+                <p class="admin-note">Teachers and administrators use the access key to open the admin workspace.</p>
+            </div>
+
+            <!-- FORGOT PASSWORD -->
+
+            <div class="forgot student-field">
+
+                <a href="#">
+                    Forgot password?
+                </a>
+
+            </div>
+
+
+            <!-- SIGN IN -->
+
+            <button
+                type="submit"
+                class="login-btn"
+                id="loginButton"
+            >
+
+                Sign In →
+
+            </button>
+
+        </form>
+
+
+        <!-- REGISTER -->
+
+        <div class="signup">
+
+            Don't have an account?
+
+            <a href="{% url 'register' %}">
+                Create account
+            </a>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+<!-- GOOGLE LOGIN HANDLER -->
+
+<script>
+    const accountType = document.getElementById("accountType");
+    const studentMode = document.getElementById("studentMode");
+    const adminMode = document.getElementById("adminMode");
+    const studentFields = document.querySelectorAll(".student-field");
+    const adminKeyField = document.getElementById("adminKeyField");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const adminKeyInput = document.getElementById("adminKey");
+    const loginButton = document.getElementById("loginButton");
+
+    function updateLoginMode() {
+        const isAdmin = adminMode.checked;
+        accountType.value = isAdmin ? "admin" : "student";
+        adminKeyField.classList.toggle("visible", isAdmin);
+        adminKeyInput.required = isAdmin;
+        emailInput.required = !isAdmin;
+        passwordInput.required = !isAdmin;
+        studentFields.forEach((field) => {
+            field.style.display = isAdmin ? "none" : "";
+        });
+        loginButton.textContent = isAdmin
+            ? "Open admin workspace →"
+            : "Sign In →";
+    }
+
+    studentMode.addEventListener("change", updateLoginMode);
+    adminMode.addEventListener("change", updateLoginMode);
+    updateLoginMode();
+
+    function handleGoogleLogin(response) {
+
+        const form = document.createElement("form");
+
+        form.method = "POST";
+
+        form.action = "{% url 'google_login' %}";
+
+
+        const csrfInput = document.createElement("input");
+
+        csrfInput.type = "hidden";
+
+        csrfInput.name = "csrfmiddlewaretoken";
+
+        csrfInput.value =
+            document.querySelector(
+                "[name=csrfmiddlewaretoken]"
+            ).value;
+
+
+        const credentialInput = document.createElement("input");
+
+        credentialInput.type = "hidden";
+
+        credentialInput.name = "credential";
+
+        credentialInput.value = response.credential;
+
+
+        form.appendChild(csrfInput);
+
+        form.appendChild(credentialInput);
+
+        document.body.appendChild(form);
+
+        form.submit();
+
+    }
+    const passwordToggle =
+        document.getElementById("passwordToggle");
+
+
+    passwordToggle.addEventListener(
+        "click",
+        function () {
+
+            if (
+                passwordInput.type === "password"
+            ) {
+
+                passwordInput.type = "text";
+
+                passwordToggle.textContent = "🙈";
+
+                passwordToggle.setAttribute(
+                    "aria-label",
+                    "Hide password"
+                );
+
+            } else {
+
+                passwordInput.type = "password";
+
+                passwordToggle.textContent = "👁";
+
+                passwordToggle.setAttribute(
+                    "aria-label",
+                    "Show password"
+                );
+
+            }
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>
