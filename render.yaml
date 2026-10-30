@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: techpilot
+    runtime: python
+    plan: free
+    branch: main
+    buildCommand: bash build.sh
+    startCommand: python manage.py migrate --noinput && gunicorn techpilot.wsgi:application --bind 0.0.0.0:$PORT
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.3
+      - key: DEBUG
+        value: "false"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ADMIN_ACCESS_KEY
+        generateValue: true
+      - key: SQLITE_PATH
+        value: /tmp/techpilot-demo.sqlite3

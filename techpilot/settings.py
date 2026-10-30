@@ -12,39 +12,67 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 
 from pathlib import Path
 import os
+import secrets
+
+from django.core.exceptions import ImproperlyConfigured
 from dotenv import load_dotenv
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Load environment variables from .env
+# Load local environment variables from .env; Render provides its own environment.
 load_dotenv(BASE_DIR / ".env")
 
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(tg_hr3&j2!9n-=x_4d$3ac8r50$a&p&0@v%h^77mdewnbv@xu'
+IS_RENDER = os.environ.get("RENDER", "").lower() == "true"
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    if IS_RENDER:
+        raise ImproperlyConfigured("Set SECRET_KEY in the Render environment.")
+    SECRET_KEY = secrets.token_urlsafe(50)
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = not IS_RENDER and os.getenv("DEBUG", "true").lower() in {
+    "1", "true", "yes", "on"
+}
 
 ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    "0.0.0.0",
-    "testserver",
+    host.strip()
+    for host in os.getenv("ALLOWED_HOSTS", "").split(",")
+    if host.strip()
 ]
+if not IS_RENDER:
+    ALLOWED_HOSTS.extend(["localhost", "127.0.0.1", "0.0.0.0", "testserver"])
+render_hostname = os.getenv("RENDER_EXTERNAL_HOSTNAME")
+if render_hostname:
+    ALLOWED_HOSTS.append(render_hostname)
+
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
+    if origin.strip()
+]
+if render_hostname:
+    CSRF_TRUSTED_ORIGINS.append(f"https://{render_hostname}")
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SECURE_SSL_REDIRECT = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
+SECURE_HSTS_SECONDS = 3600 if not DEBUG else 0
 
 
 # Google OAuth
 # Google Client ID is loaded from the .env file
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
-ADMIN_ACCESS_KEY = os.getenv("ADMIN_ACCESS_KEY", "qwerty")
+ADMIN_ACCESS_KEY = os.getenv("ADMIN_ACCESS_KEY")
+if not ADMIN_ACCESS_KEY:
+    ADMIN_ACCESS_KEY = "qwerty" if DEBUG else secrets.token_urlsafe(32)
 
 
 # Application definition
@@ -64,6 +92,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -101,10 +130,18 @@ WSGI_APPLICATION = 'techpilot.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
+SQLITE_PATH = os.getenv("SQLITE_PATH")
+if not SQLITE_PATH:
+    SQLITE_PATH = (
+        "/tmp/techpilot-demo.sqlite3"
+        if IS_RENDER
+        else str(BASE_DIR / "db.sqlite3")
+    )
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": SQLITE_PATH,
     }
 }
 
@@ -143,7 +180,20 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": (
+            "whitenoise.storage.CompressedManifestStaticFilesStorage"
+            if not DEBUG
+            else "django.contrib.staticfiles.storage.StaticFilesStorage"
+        ),
+    },
+}
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
@@ -155,6 +205,10 @@ STATICFILES_DIRS = [
 
 MAILERS = {
     'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
+        'BACKEND': (
+            'django.core.mail.backends.smtp.EmailBackend'
+            if not DEBUG
+            else 'django.core.mail.backends.console.EmailBackend'
+        ),
     },
 }
